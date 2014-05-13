@@ -1,7 +1,7 @@
 import pygame
 from caja_texto import CajaTexto
 from boton_editor import Boton
-from layout import GridLayout
+#from layout import GridLayout
 
 
 #Clase para el menu de creacion de nuevo mundo

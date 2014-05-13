@@ -7,7 +7,7 @@ from operator import attrgetter
 
 class Camara(pygame.sprite.Sprite):
 
-    def __init__(self, mundo, raton, tam):
+    def __init__(self, mundo, raton, tam=(200, 200)):
         super(Camara, self).__init__()
         self.mundo = mundo
 
@@ -25,7 +25,7 @@ class Camara(pygame.sprite.Sprite):
         ### importante el tam minimo del mapa debe ser como poco el tam de la camara
         self.tam_minx = self.rect.x / 32 + 1
         self.tam_miny = self.rect.y / 32 + 1
-        ### esto deberia tenerlo editor
+
         self.rect_left = pygame.rect.Rect(0, 0, self.rect.width / 4, self.rect.height)
         self.rect_top = pygame.rect.Rect(0, 0, self.rect.width,
                                             self.rect.height / 4)
@@ -152,6 +152,10 @@ class Camara(pygame.sprite.Sprite):
                         tile.tipo = tile_activo.tipo
                         tile.caminable = tile_activo.caminable
                         self.mundo.mapa_tejados[i][j] = tile
+
+    def recargar(self, mundo, raton, tam):
+
+        self.__init__(mundo, raton, tam)
 
     def get_coord(self):
 

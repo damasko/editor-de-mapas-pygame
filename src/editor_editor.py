@@ -27,9 +27,9 @@ class Editor(object):
         self.chat = Chat(self.resolucion, self.mundo.tiles_suelos1[31][31], self.mundo.capa,
                       self.mundo.modo_entidad, self.camara.pincel.borrar,
                        self.mundo.aut_save)
-        self.menu.update()
+        #self.menu.update()
         #self.eventos = EventHandler(self)
-        self.dibuja(self.menu)
+        #self.dibuja(self.menu)
         self.cambio = False
         self.fullscreen = False
         self.primera_menu = True
@@ -134,6 +134,17 @@ class Editor(object):
                                 self.camara.mostrar_capa3 = False
                             else:
                                 self.camara.mostrar_capa3 = True
+                     # test borralo
+                    if event.key == K_n:
+
+                        self.mundo.nuevo_mundo("test_borra", 20, 20)
+                        self.camara.recargar(self.mundo, self.raton, self.resolucion)
+
+                    if event.key == K_m:
+
+                        self.mundo.cargar_mapa("mapas/capas.txt")
+                        self.camara.recargar(self.mundo, self.raton, self.resolucion)
+
                     if event.key == K_LALT:
                         if self.mundo.capa == 4:
                             if self.camara.mostrar_capa4:
@@ -144,6 +155,9 @@ class Editor(object):
 
                         self.camara.tile_base(self.tile_activo)
 
+
+            #print len(self.mundo.mapa.layer1)
+            #print len(self.mundo.mapa_suelos1[0])
             if self.menu.menu_nmundo.activo:
 
                 self.menu_activo()
@@ -178,7 +192,6 @@ class Editor(object):
                     #self.dibuja(self.menu)
                     #self.primera_menu = False
 
-            #self.camara.pincel.update()
             self.dibuja(self.menu)
             self.muestra_chat()
             self.dibuja(self.chat)

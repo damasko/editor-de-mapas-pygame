@@ -113,8 +113,18 @@ class Mapa(object):
                 linea.append(tile)
             self.tiles_suelos1.append(linea)
 
-
         return self.tiles_suelos1
+
+    def clear_arrays(self):
+
+        self.array_lectura_suelos = []
+        self.array_lectura_paredes = []
+        self.array_lectura_tejados = []
+        self.array_lectura_enemigos = []
+        self.layer1 = []
+        self.layer2 = []
+        self.layer3 = []
+        self.enemigos = []
 
     def crear_tiles_paredes(self):
         for i in range(len(self.tileset2)):
@@ -247,15 +257,61 @@ class Mapa(object):
 
         return self.tiles_enemigos
 
+    def crear_mapa(self, tamx, tamy):
+
+        # aprovechando que tanto el mapa paredes, suelos y tejados debe tener el mismo tamano
+        # me aseguro reseteando los arrays aunque puede que no sea necesario mejor evitar
+        # problemas
+        self.clear_arrays()
+
+        x = 0
+        y = 0
+        for i in range(tamy):
+
+            x = 0
+            linea_suelos = []  # suelos
+            linea_paredes = []  # paredes
+            linea_tejados = [] # tejados
+            for j in range(tamx):
+
+                tile = Tile()  # rehuso del objeto tile
+                tile.rect.move_ip(x, y)
+                #suelos
+                tile.nombre = "default_suelo"
+                tile.surface = self.tileset1[31][31].convert()
+                tile.tipo = "#"
+                tile.caminable = False
+                linea_suelos.append(tile)
+
+                #paredes
+                tile.nombre = "default_pared"
+                tile.surface = self.tileset2[31][31].convert_alpha()
+                tile.tipo = "$"
+                tile.caminable = False
+                linea_paredes.append(tile)
+
+                #tejados
+                tile.nombre = "default_tejado"
+                tile.surface = self.tileset3[31][31].convert_alpha()
+                tile.tipo = "$"
+                tile.caminable = False
+                linea_tejados.append(tile)
+                x = x + 32
+            print y/32
+
+            self.array_lectura_suelos.append(linea_suelos)
+            self.array_lectura_paredes.append(linea_paredes)
+            self.array_lectura_tejados.append(linea_tejados)
+
+            y = y + 32
+
+        self.parsear_suelos()
+        self.parsear_paredes()
+        self.parsear_tejados()
+
     def leer_ascii_map(self, ascii_map):
+        self.clear_arrays()
         a = open(ascii_map, 'r')
-        # manera tradicional:
-
-        #for linea in a:
-            #if linea[0] != "@":
-                #self.array_lectura_suelos.append(linea.split())
-
-        i = 0
 
         lista = list(a)
         a.close()
@@ -263,7 +319,10 @@ class Mapa(object):
         paredes = True
         tejados = True
         enemigos = True
+
+        i = 0
         while i < len(lista):
+
             if suelos:
                 if "@end_suelos" in lista[i]:
                     suelos = False
