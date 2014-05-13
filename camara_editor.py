@@ -8,6 +8,7 @@ from operator import attrgetter
 class Camara(pygame.sprite.Sprite):
 
     def __init__(self, mundo, raton, tam):
+        super(Camara, self).__init__()
         self.mundo = mundo
 
         self.raton = raton
@@ -55,14 +56,6 @@ class Camara(pygame.sprite.Sprite):
                 coordx = self.get_coord()[0] / 32
                 coordy = self.get_coord()[1] / 32
                 self.pincel.borra_enemigo(coordx, coordy, self.mundo)
-
-            #if self.pincel.tile_mapa:
-
-                #if pygame.mouse.get_pressed()[0]:
-
-                    #coordx = self.get_coord()[0] / 32
-                    #coordy = self.get_coord()[1] / 32
-                    #self.pincel.get_tile_mapa(coordx, coordy, self.mundo)
 
             posx = 0
             posy = 0

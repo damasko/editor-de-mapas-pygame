@@ -49,7 +49,7 @@ class Mundo(object):
             mapa.write('\n')
         mapa.write('@end_tejados\n')
         for enemigo in self.mapa_enemigos:
-            print "entro"
+
             mapa.write(enemigo.nombre + " " + str(enemigo.rect.x) + " "
                     + str(enemigo.rect.y) + " " + str(enemigo.capa) + "\n")
         mapa.write('@end_enemigos')

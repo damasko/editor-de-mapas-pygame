@@ -4,6 +4,7 @@ import pygame
 class Tileset(object):
 
     def __init__(self, imagen, tilesize_x, tilesize_y):
+
         self.imagen = imagen
         self.tilesize_x = tilesize_x
         self.tilesize_y = tilesize_y

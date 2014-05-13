@@ -10,7 +10,7 @@ class MarcoTileset(pygame.sprite.Sprite):
     ### sobre la pantalla, mejor ponlos al mismo nivel y ajustalos para que parezca que uno
     ### esta dentro de otro (problemas con colisiones)
 
-    def __init__(self, mundo, raton):
+    def __init__(self, mundo):
 
         super(MarcoTileset, self).__init__()
         self.mundo = mundo
@@ -19,7 +19,7 @@ class MarcoTileset(pygame.sprite.Sprite):
         self.tiles_paredes = self.mundo.tiles_paredes
         self.tiles_tejados = self.mundo.tiles_tejados
         self.tiles_enemigos = self.mundo.tiles_enemigos
-        self.raton = raton
+        #self.raton = raton
         self.copia_tiles = []
         self.copia_tiles_paredes = []
         self.copia_tiles_tejados = []
@@ -147,7 +147,7 @@ class MarcoTileset(pygame.sprite.Sprite):
             return True
 
     def update(self):
-        ## cuando termines poner elses
+
         self.surface.fill((0, 0, 0))
         if not self.modo_entidad:
             if self.capa == 1:
@@ -156,6 +156,8 @@ class MarcoTileset(pygame.sprite.Sprite):
                 tiles_min = self.copia_tiles_paredes
             elif self.capa == 4:
                 tiles_min = self.copia_tiles_tejados
+            else:
+                pass
             if self.default:
 
                 if self.capa == 1:
@@ -175,7 +177,7 @@ class MarcoTileset(pygame.sprite.Sprite):
         for fila in tiles_min:
             for tile in fila:
                 self.surface.blit(tile.surface, (tile.rect.x, tile.rect.y))
-            ### anadir los else
+
 
     def get_tileselec(self, coord):
 

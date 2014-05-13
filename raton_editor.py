@@ -1,12 +1,14 @@
 import pygame
 
+
 class Raton(pygame.sprite.Sprite):
 
     def __init__(self, imagen=None):
+
         super(Raton, self).__init__()
 
         if not imagen:
-            self.surface = pygame.surface.Surface((6,6))
+            self.surface = pygame.surface.Surface((6,6)).convert()
         else:
             self.surface = pygame.image.load(imagen).convert_alpha()
         self.surface = pygame.transform.scale(self.surface, (16, 32))

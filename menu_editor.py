@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 from boton_editor import Boton
 from marco_tileset import MarcoTileset
+from nuevo_mundo import NuevoMundo
 
 
 class Menu(pygame.sprite.Sprite):
@@ -17,40 +18,62 @@ class Menu(pygame.sprite.Sprite):
         self.rect = self.surface.get_rect()
         self.rect.move_ip(pantalla_tam[0] / 2, 0)
 
-        self.boton_nuevo = Boton(200, 75, 0, 600, "Nuevo mapa", "boton.png")
-        self.boton_nuevo.centrarx(self.rect, 600)
-        self.boton_salir = Boton(200, 75, 0, 800, "Salir", "boton.png")
-        self.boton_salir.centrarx(self.rect, 800)
-        self.boton_salir.bind(self.fsalir())
+        self.boton_nuevo = Boton(150, 75, 0, 600, "Nuevo mapa", "boton_1.png")
+        self.boton_nuevo.centrarx(self.rect)
+        self.boton_salir = Boton(150, 75, 0, 800, "Salir", "boton_1.png")
+        self.boton_salir.centrarx(self.rect)
+        self.boton_salir.bind(self.fsalir)
         self.salir = 0
-        self.marco_tileset = MarcoTileset(mundo, self.raton)
+        self.marco_tileset = MarcoTileset(mundo)
         self.offsetx = 0
         self.offsety = 10
         self.marco_tileset.centrarx(self.rect, self.offsety)
-
+        self.menu_nmundo = NuevoMundo(self.rect.width - 20, self.rect.height/2 - 20, 10, 10, self.raton)
         self.coordx = 0
         self.coordy = 0
-        #print self.boton_nuevo.rect.x
-        #print self.boton_nuevo.rect.y
 
     def update(self):
 
-        self.boton_nuevo.imprime()
-        self.boton_salir.imprime()
-        self.surface.blit(self.boton_nuevo.surface,
-                        (self.boton_nuevo.rect.x, self.boton_nuevo.rect.y))
-        self.surface.blit(self.boton_salir.surface,
-                        (self.boton_salir.rect.x, self.boton_salir.rect.y))
-        self.marco_tileset.update()
-        self.surface.blit(self.marco_tileset.surface, (self.marco_tileset.rect.x,
-                         self.marco_tileset.rect.y))
+        #print self.menu_nmundo.rect.x
+        #print self.menu_nmundo.rect.y
+
         if self.focused():
             self.set_coord()
+            self.boton_nuevo.click(self.coordx, self.coordy)
+            self.boton_salir.click(self.coordx, self.coordy)
             if self.marco_tileset.focused(self.coordx, self.coordy,
                                         self.offsetx, self.offsety):
                 lista = self.get_tile_coord()
                 self.marco_tileset.get_tileselec(lista)
-        #pygame.draw.rect(self.surface, (255, 0, 0), self.boton_nuevo.rect)
+
+        self.marco_tileset.update()
+        self.surface.blit(self.marco_tileset.surface, (self.marco_tileset.rect.x,
+                         self.marco_tileset.rect.y))
+        self.boton_nuevo.imprime()
+        self.boton_salir.imprime()
+
+        self.surface.blit(self.boton_nuevo.surface,
+                        (self.boton_nuevo.rect.x, self.boton_nuevo.rect.y))
+        self.surface.blit(self.boton_salir.surface,
+                        (self.boton_salir.rect.x, self.boton_salir.rect.y))
+
+        if self.boton_salir.variable == 1:
+
+            self.salir = 1
+
+        # lo suyo seria cambiar la variable self.salir directamente
+        # pasandosela al boton, pero no la cambia (supongo que la pasa por copia)
+
+        if self.boton_nuevo.variable == 1:
+            self.boton_nuevo.variable = 0
+
+            self.menu_nmundo.activo = True
+
+        self.menu_nmundo.update()
+
+    def fnmundo(self):
+
+        self.boton_nuevo.variable = 1
 
     def fsalir(self):
 
