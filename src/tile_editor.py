@@ -2,7 +2,7 @@ import pygame
 
 
 class Tile(pygame.sprite.Sprite):
-    # constructor y sus por default:
+    # constructor :
     def __init__(self):
         super(Tile, self).__init__()
         self.nombre = "default"

@@ -8,23 +8,27 @@ class CajaTexto(pygame.sprite.Sprite):
         super(CajaTexto, self).__init__()
         pygame.font.init()
         self.texto = ""
-        #self.surface = pygame.surface.Surface((tamx, tamy)).convert()
         self.surface = pygame.image.load("res/caja.png")
         pygame.transform.scale(self.surface, (tamx, tamy)).convert()
         self.rect = self.surface.get_rect()
         self.rect.move_ip(posx, posy)
-        self.activo = False
-
+        self.fijado = False
         #fuente provisional
         self.fuente = pygame.font.SysFont('Arial', 14)
 
-    def update(self, raton_coordx, raton_coordy):
-        #print self.rect.x
-        #print self.rect.y
-        pygame.draw.rect(self.surface, (255, 255, 255), self.rect)
-        if self.focused(raton_coordx, raton_coordy):
+    def clear(self):
 
-            for event in pygame.event.get():
+        self.texto = ""
+
+    def update(self, raton_coordx, raton_coordy, lista_eventos):
+        if self.focused(raton_coordx, raton_coordy) and pygame.mouse.get_pressed()[0]:
+            self.fijado = True
+
+        if self.fijado:
+
+            if not self.focused(raton_coordx, raton_coordy) and pygame.mouse.get_pressed()[0]:
+                self.fijado = False
+            for event in lista_eventos:
                 if event.type == pygame.KEYDOWN:
 
                     # (cogido de eztext)
@@ -59,21 +63,25 @@ class CajaTexto(pygame.sprite.Sprite):
                     elif event.key == K_2: self.texto += '2'
                     elif event.key == K_3: self.texto += '3'
                     elif event.key == K_4: self.texto += '4'
-                    elif event.key == K_: self.texto += '5'
+                    elif event.key == K_5: self.texto += '5'
                     elif event.key == K_6: self.texto += '6'
                     elif event.key == K_7: self.texto += '7'
                     elif event.key == K_8: self.texto += '8'
                     elif event.key == K_9: self.texto += '9'
+                    elif event.key == K_SPACE: self.texto += ' '
                     elif event.key == K_MINUS: self.texto += '-'
                     elif event.key == K_EQUALS: self.texto += '='
                     elif event.key == K_LEFTBRACKET: self.texto += '['
                     elif event.key == K_RIGHTBRACKET: self.texto += ']'
-                    elif event.key == K_BACKSLAS: self.texto += '\\'
+                    #elif event.key == K_BACKSLAS: self.texto += '\\'
                     elif event.key == K_SEMICOLON: self.texto += ';'
                     elif event.key == K_QUOTE: self.texto += '\''
                     elif event.key == K_COMMA: self.texto += ','
                     elif event.key == K_PERIOD: self.texto += '.'
                     elif event.key == K_SLASH: self.texto += '/'
+                    elif event.key == K_BACKSPACE:
+                        if len(self.texto) > 0:
+                            self.texto = self.texto[:-1]
                     else: pass
 
         self.surface.blit(self.fuente.render(self.texto, True,

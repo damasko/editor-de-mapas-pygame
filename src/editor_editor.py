@@ -134,18 +134,12 @@ class Editor(object):
                                 self.camara.mostrar_capa3 = False
                             else:
                                 self.camara.mostrar_capa3 = True
-                     # test borralo
-                    if event.key == K_n:
-
-                        self.mundo.nuevo_mundo("test_borra", 33, 34) # parece que la camara
-                        # se ajusta mal cuando los tiles son pares
-                        self.camara.recargar(self.mundo, self.raton, self.resolucion)
-                        #self.menu = Menu(self.resolucion, self.raton, self.mundo)
-
+                    #borrar
                     if event.key == K_m:
 
-                        self.mundo.cargar_mapa("mapas/capas.txt")
+                        self.mundo.cargar_mapa("mapas/mapa_default.txt")
                         self.camara.recargar(self.mundo, self.raton, self.resolucion)
+                        print len(self.ma)
 
                     if event.key == K_LALT:
                         if self.mundo.capa == 4:
@@ -231,18 +225,15 @@ class Editor(object):
     def menu_activo(self):
 
         while self.menu.menu_nmundo.activo:
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    self.menu.menu_nmundo.activo = False
+
+            # recuerda que no puedes estar constantemente llamando a pygame.event.get
+            # ya que vacia la cola de eventos en cada llamada, mejor almacenarlo en
+            # este caso
+            eventos = pygame.event.get()
             self.reloj.tick(35)
             self.pantalla.fill((0, 0, 0))
             self.raton.update()
-            #self.menu.update()
-            self.menu.menu_nmundo.update()
-
+            self.menu.menu_nmundo.update(eventos)
             self.pantalla.blit(self.raton.surface, (self.raton.puntero.x, self.raton.puntero.y))
-            #self.dibuja(self.menu)
-            #self.dibuja(self.camara)
             self.dibuja(self.menu.menu_nmundo)
-            pygame.display.update(self.menu.menu_nmundo.rect)
             pygame.display.update()

@@ -17,25 +17,23 @@ class Menu(pygame.sprite.Sprite):
             (pantalla_tam[0] / 2, pantalla_tam[1])).convert()
         self.rect = self.surface.get_rect()
         self.rect.move_ip(pantalla_tam[0] / 2, 0)
-
+        self.mundo = mundo
         self.boton_nuevo = Boton(150, 75, 0, 600, "Nuevo mapa", "res/boton_1.png")
         self.boton_nuevo.centrarx(self.rect)
         self.boton_salir = Boton(150, 75, 0, 800, "Salir", "res/boton_1.png")
         self.boton_salir.centrarx(self.rect)
         self.boton_salir.bind(self.fsalir)
         self.salir = 0
-        self.marco_tileset = MarcoTileset(mundo)
+        self.marco_tileset = MarcoTileset(self.mundo)
         self.offsetx = 0
         self.offsety = 10
         self.marco_tileset.centrarx(self.rect, self.offsety)
-        self.menu_nmundo = NuevoMundo(self.rect.width - 20, self.rect.height/2 - 20, 10, 10, self.raton)
+        self.menu_nmundo = NuevoMundo(self.rect.width - 20,
+                self.rect.height/2 - 20, 10, 10, self.raton, self.mundo)
         self.coordx = 0
         self.coordy = 0
 
     def update(self):
-
-        #print self.menu_nmundo.rect.x
-        #print self.menu_nmundo.rect.y
 
         if self.focused():
             self.set_coord()
@@ -68,8 +66,6 @@ class Menu(pygame.sprite.Sprite):
             self.boton_nuevo.variable = 0
 
             self.menu_nmundo.activo = True
-
-        self.menu_nmundo.update()
 
     def fnmundo(self):
 
