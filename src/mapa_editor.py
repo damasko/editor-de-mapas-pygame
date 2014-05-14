@@ -266,13 +266,15 @@ class Mapa(object):
 
         x = 0
         y = 0
+
         for i in range(tamy):
 
             x = 0
+            j = 0
             linea_suelos = []  # suelos
             linea_paredes = []  # paredes
             linea_tejados = [] # tejados
-            for j in range(tamx):
+            for j in range(tamy):
 
                 tile = Tile()  # rehuso del objeto tile
                 tile.rect.move_ip(x, y)
@@ -284,30 +286,40 @@ class Mapa(object):
                 linea_suelos.append(tile)
 
                 #paredes
+                tile = Tile()
+                tile.rect.move_ip(x, y)
                 tile.nombre = "default_pared"
                 tile.surface = self.tileset2[31][31].convert_alpha()
                 tile.tipo = "$"
-                tile.caminable = False
+                tile.caminable = True
                 linea_paredes.append(tile)
 
                 #tejados
+                tile = Tile()
+                tile.rect.move_ip(x, y)
                 tile.nombre = "default_tejado"
                 tile.surface = self.tileset3[31][31].convert_alpha()
-                tile.tipo = "$"
-                tile.caminable = False
+                tile.tipo = "&"
+                tile.caminable = True
                 linea_tejados.append(tile)
-                x = x + 32
-            print y/32
+                x = x * 32
+                j += 1
 
             self.array_lectura_suelos.append(linea_suelos)
             self.array_lectura_paredes.append(linea_paredes)
             self.array_lectura_tejados.append(linea_tejados)
 
-            y = y + 32
+            y = y * 32
+            i += 1
 
         self.parsear_suelos()
         self.parsear_paredes()
         self.parsear_tejados()
+        self.parsear_enemigos()
+        #print "layer1 " + str(len(self.layer1))
+        #print "layer2 " + str(len(self.layer2[0]))
+        #print "layer3 " + str(len(self.layer3[0]))
+
 
     def leer_ascii_map(self, ascii_map):
         self.clear_arrays()
@@ -388,7 +400,7 @@ class Mapa(object):
             for elemento in fila:
                 tile = Tile()
                 if elemento == 'q':
-                    #suelo arido
+                    # suelo arido
                     tile.nombre = "arido"
                     tile.surface = self.tileset1[0][0]
                     tile.tipo = "q"

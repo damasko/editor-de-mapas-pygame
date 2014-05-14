@@ -11,14 +11,8 @@ class Mundo(object):
         self.tiles_paredes = self.mapa.crear_tiles_paredes()
         self.tiles_tejados = self.mapa.crear_tiles_tejados()
         self.tiles_enemigos = self.mapa.crear_tiles_enemigos()
-        #self.mapa_suelos1 = []
-        #self.mapa_paredes = []
-        #self.mapa_tejados = []
-        #self.mapa_enemigos = []
-
         #self.cargar_mapa("mapa_default.txt")
-        self.nuevo_mundo("default" , 20, 20)
-
+        self.nuevo_mundo("default" , 30, 30)
         self.ruta_mapas = "/mapas/"
         self.path = os.getcwd()
         self.aut_save = True
@@ -35,23 +29,24 @@ class Mundo(object):
         self.mapa_paredes = []
         self.mapa_tejados = []
         self.mapa_enemigos = []
+        self.mapa.clear_arrays()
 
     def nuevo_mundo(self, nombre, tamx, tamy):
 
-        self.clear_arrays()
+        #self.clear_arrays()
         self.nombre = nombre
         self.mapa.crear_mapa(tamx, tamy)
+        self.mapa.layer1 = [] # parece que layer1 no se vacia bien con self.mapa.clear_arrays()
+        self.mapa.layer2 = []
+        self.mapa.layer3 = []
         self.mapa_suelos1 = self.mapa.parsear_suelos()
         self.mapa_paredes = self.mapa.parsear_paredes()
         self.mapa_tejados = self.mapa.parsear_tejados()
         self.mapa_enemigos = self.mapa.parsear_enemigos()
-        #print len(self.mapa_suelos1[0])
-        #print len(self.mapa_paredes[0])
-        #print len(self.mapa_tejados[0])
 
     def cargar_mapa(self, fichero):
 
-        self.clear_arrays()
+        #self.clear_arrays()
         self.mapa.leer_ascii_map(fichero)
         self.mapa_suelos1 = self.mapa.parsear_suelos()
         self.mapa_paredes = self.mapa.parsear_paredes()

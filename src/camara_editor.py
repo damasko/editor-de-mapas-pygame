@@ -46,6 +46,7 @@ class Camara(pygame.sprite.Sprite):
         self.grupo_mundo = self.mundo.grupo_mundo
         self.entes = []
         self.pincel = Pincel()
+        #print len(self.mundo.mapa_suelos1)
 
     def update(self, tile_seleccionado):
 
@@ -78,7 +79,6 @@ class Camara(pygame.sprite.Sprite):
             self.entes_visibles()
             self.rect.move_ip(posx, posy)
 
-
     def focused(self):
 
         if self.rectangulo.colliderect(self.raton.puntero):
@@ -88,7 +88,6 @@ class Camara(pygame.sprite.Sprite):
 
             coordx = self.get_coord()[0] / 32
             coordy = self.get_coord()[1] / 32
-
 
             if self.mundo.capa == 1:
 
@@ -190,6 +189,7 @@ class Camara(pygame.sprite.Sprite):
         if self.finy:
             self.tiley_max = self.rect.bottomright[1] / 32
         else:
+
             self.tiley_max = (self.rect.bottomright[1] / 32) + 1
 
         self.surface.fill((0, 0, 0))

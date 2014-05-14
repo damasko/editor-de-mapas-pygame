@@ -137,8 +137,10 @@ class Editor(object):
                      # test borralo
                     if event.key == K_n:
 
-                        self.mundo.nuevo_mundo("test_borra", 20, 20)
+                        self.mundo.nuevo_mundo("test_borra", 33, 34) # parece que la camara
+                        # se ajusta mal cuando los tiles son pares
                         self.camara.recargar(self.mundo, self.raton, self.resolucion)
+                        #self.menu = Menu(self.resolucion, self.raton, self.mundo)
 
                     if event.key == K_m:
 
