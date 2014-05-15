@@ -72,7 +72,6 @@ class Mundo(object):
         self.mapa_paredes = self.mapa.parsear_paredes()
         self.mapa_tejados = self.mapa.parsear_tejados()
         self.mapa_enemigos = self.mapa.parsear_enemigos()
-        print len(self.mapa_suelos1)
 
     def grabar(self, nombre):
 

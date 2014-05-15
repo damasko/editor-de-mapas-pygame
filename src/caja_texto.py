@@ -2,31 +2,48 @@ import pygame
 from pygame.locals import *
 
 
-class CajaTexto(pygame.sprite.Sprite):
+class CajaTexto(object):
 
     def __init__(self, tamx, tamy, posx, posy):
+
         super(CajaTexto, self).__init__()
         pygame.font.init()
         self.texto = ""
         self.surface = pygame.image.load("res/caja.png")
-        pygame.transform.scale(self.surface, (tamx, tamy)).convert()
+        self.surface = pygame.transform.scale(self.surface, (tamx, tamy)).convert()
         self.rect = self.surface.get_rect()
         self.rect.move_ip(posx, posy)
         self.fijado = False
         #fuente provisional
         self.fuente = pygame.font.SysFont('Arial', 14)
+        # tposx y tposy indican donde se va a pintar el texto
+        self.tposx = 0
+        self.tposy = 0
+        self.centrary()
 
     def clear(self):
 
         self.texto = ""
 
+    def centrary(self):
+
+        self.posy = self.rect.centery
+
     def update(self, raton_coordx, raton_coordy, lista_eventos):
+
+        self.surface.blit(self.fuente.render(self.texto, True,
+                                (0, 0, 255)), (10, 10))
+
+        # con focused y fijado conseguimos que al darle click al box este se mantenga
+        # activo, si hacemos click fuera de el se desactiva
+
         if self.focused(raton_coordx, raton_coordy) and pygame.mouse.get_pressed()[0]:
+
             self.fijado = True
 
         if self.fijado:
 
-            if not self.focused(raton_coordx, raton_coordy) and pygame.mouse.get_pressed()[0]:
+            if pygame.mouse.get_pressed()[0] and not self.focused(raton_coordx, raton_coordy):
                 self.fijado = False
             for event in lista_eventos:
                 if event.type == pygame.KEYDOWN:
@@ -83,9 +100,6 @@ class CajaTexto(pygame.sprite.Sprite):
                         if len(self.texto) > 0:
                             self.texto = self.texto[:-1]
                     else: pass
-
-        self.surface.blit(self.fuente.render(self.texto, True,
-                            (0, 0, 255)), (self.rect.x, self.rect.y))
 
     def focused(self, raton_coordx, raton_coordy):
 

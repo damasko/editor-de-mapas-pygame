@@ -77,8 +77,6 @@ class Boton(object):
 
             self.surface.blit(self.fuente.render(self.texto,
                         True, self.color_texto), (self.texto_x, self.texto_y))
-            self.surface.blit(self.surface, (0, 0))
-
 
     def focused(self, raton_coordx, raton_coordy):
 

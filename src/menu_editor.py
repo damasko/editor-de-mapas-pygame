@@ -7,11 +7,12 @@ from nuevo_mundo import NuevoMundo
 
 class Menu(pygame.sprite.Sprite):
 
-    def __init__(self, pantalla_tam, raton, mundo):
+    def __init__(self, pantalla_tam, raton, mundo, nmundo):
 
         super(Menu, self).__init__()
         self.raton = raton
         #self.mundo = mundo
+        self.nmundo = nmundo
         self.surface = pygame.image.load("res/menu.png")
         self.surface = pygame.transform.scale(self.surface,
             (pantalla_tam[0] / 2, pantalla_tam[1])).convert()
@@ -28,8 +29,6 @@ class Menu(pygame.sprite.Sprite):
         self.offsetx = 0
         self.offsety = 10
         self.marco_tileset.centrarx(self.rect, self.offsety)
-        self.menu_nmundo = NuevoMundo(self.rect.width - 20,
-                self.rect.height/2 - 20, 10, 10, self.raton, self.mundo)
         self.coordx = 0
         self.coordy = 0
 
@@ -49,7 +48,6 @@ class Menu(pygame.sprite.Sprite):
                          self.marco_tileset.rect.y))
         self.boton_nuevo.imprime()
         self.boton_salir.imprime()
-
         self.surface.blit(self.boton_nuevo.surface,
                         (self.boton_nuevo.rect.x, self.boton_nuevo.rect.y))
         self.surface.blit(self.boton_salir.surface,
@@ -65,7 +63,7 @@ class Menu(pygame.sprite.Sprite):
         if self.boton_nuevo.variable == 1:
             self.boton_nuevo.variable = 0
 
-            self.menu_nmundo.activo = True
+            self.nmundo.activo = True
 
     def fnmundo(self):
 

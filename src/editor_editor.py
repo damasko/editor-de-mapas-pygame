@@ -6,6 +6,7 @@ from raton_editor import Raton
 from chat_editor import Chat
 from mundo_editor import Mundo
 from ayuda_editor import Ayuda
+from nuevo_mundo import NuevoMundo
 #from eventhandler import EventHandler
 
 
@@ -23,13 +24,16 @@ class Editor(object):
         self.mundo = Mundo(nombre_mundo)
         self.raton = Raton("res/puntero.png")
         self.camara = Camara(self.mundo, self.raton, self.resolucion)
-        self.menu = Menu(self.resolucion, self.raton, self.mundo)
+        # de momento menu_nmundo se queda aqui ya veremos si es mejor moverlo a
+        # menu como estaba antes
+        self.menu_nmundo = NuevoMundo(self.resolucion[0] / 2,
+                    self.resolucion[1] / 2, 10, 10, self.raton, self.mundo)
+
+        self.menu = Menu(self.resolucion, self.raton, self.mundo, self.menu_nmundo)
         self.chat = Chat(self.resolucion, self.mundo.tiles_suelos1[31][31], self.mundo.capa,
                       self.mundo.modo_entidad, self.camara.pincel.borrar,
                        self.mundo.aut_save)
-        #self.menu.update()
-        #self.eventos = EventHandler(self)
-        #self.dibuja(self.menu)
+
         self.cambio = False
         self.fullscreen = False
         self.primera_menu = True
@@ -46,7 +50,6 @@ class Editor(object):
         while self.menu.salir != 1:
 
             self.reloj.tick(40)
-            #self.eventos.update()
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.menu.salir = True
@@ -140,6 +143,7 @@ class Editor(object):
                         self.mundo.cargar_mapa("mapas/mapa_default.txt")
                         self.camara.recargar(self.mundo, self.raton, self.resolucion)
                         print len(self.ma)
+                    ###
 
                     if event.key == K_LALT:
                         if self.mundo.capa == 4:
@@ -151,10 +155,7 @@ class Editor(object):
 
                         self.camara.tile_base(self.tile_activo)
 
-
-            #print len(self.mundo.mapa.layer1)
-            #print len(self.mundo.mapa_suelos1[0])
-            if self.menu.menu_nmundo.activo:
+            if self.menu_nmundo.activo:
 
                 self.menu_activo()
 
@@ -179,6 +180,9 @@ class Editor(object):
             # el beneficio es mucho mayor. (el menu no se actualiza correctamente por las
             # teclas)
 
+            # para ahorrar el blit del menu cuando no esta activo, el problema es que que
+            # la tecla no actualiza bien el marco de tilesets si este no se encuentra
+            # focuseado(logico) revisar
             #if self.menu.focused():
                 #self.dibuja(self.menu)
                 #self.primera_menu = True
@@ -224,16 +228,23 @@ class Editor(object):
 
     def menu_activo(self):
 
-        while self.menu.menu_nmundo.activo:
+        while self.menu_nmundo.activo:
 
             # recuerda que no puedes estar constantemente llamando a pygame.event.get
-            # ya que vacia la cola de eventos en cada llamada, mejor almacenarlo en
-            # este caso
+            # ya que vacia la cola de eventos en cada llamada y devuelve una
+            # lista, mejor almacenarlo en este caso, pasarsela a menu_nmundo y
+            # que el compruebe los textinput, que requieren ver eventos de teclado
             eventos = pygame.event.get()
             self.reloj.tick(35)
             self.pantalla.fill((0, 0, 0))
             self.raton.update()
-            self.menu.menu_nmundo.update(eventos)
+            self.menu_nmundo.update(eventos)
+            self.menu_nmundo.render()
+
+            self.dibuja(self.menu_nmundo)
+            # ULTIMO: TIENES QUE VER POR QUE NO SE ACTUALIZA CORRECTAMENTE LOS TEXTBOX
+            # PARECE QUE EL PROBLEMA ES POR PERTENECER A OTRA CLASE :s
+            #self.dibuja(self.menu_nmundo.caja_nombre)
+
             self.pantalla.blit(self.raton.surface, (self.raton.puntero.x, self.raton.puntero.y))
-            self.dibuja(self.menu.menu_nmundo)
             pygame.display.update()

@@ -5,6 +5,7 @@ from tile_editor import Tile
 from pincel import Pincel
 from operator import attrgetter
 
+
 class Camara(pygame.sprite.Sprite):
 
     def __init__(self, mundo, raton, tam=(200, 200)):
@@ -31,13 +32,14 @@ class Camara(pygame.sprite.Sprite):
                                             self.rect.height / 4)
         self.rect_right = pygame.rect.Rect(self.rect.width - self.rect.width / 4,
              0, self.rect.width / 4, self.rect.height)
-        self.rect_bottom = pygame.rect.Rect(0, self.rect.height - self.rect.height / 4, self.rect.width, self.rect.height / 4)
+        self.rect_bottom = pygame.rect.Rect(0, self.rect.height - self.rect.height / 4,
+             self.rect.width, self.rect.height / 4)
 
         self.surface = pygame.surface.Surface((self.rect.width,
                                                 self.rect.height)).convert()
         ## Rect para comprobar el raton
         self.rectangulo = self.surface.get_rect()
-        self.rectangulo.move_ip(0,0)
+        self.rectangulo.move_ip(0, 0)
 
         self.finx = False
         self.finy = False
