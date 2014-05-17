@@ -21,10 +21,6 @@ class Pincel(pygame.sprite.Sprite):
 
     def update(self):
 
-        #for event in pygame.event.get():
-        #if self.rect
-        #self.array_undo = []
-
         if self.tam == 1:
             self.surface = self.surface_1
             self.rect = self.surface.get_rect()
@@ -50,8 +46,10 @@ class Pincel(pygame.sprite.Sprite):
                 try:
                     tile = Tile()
                     tile.surface = tile_seleccionado.surface.copy()
-                    tile.rect = tile.surface.get_rect()
-                    tile.rect.move_ip(coordx * 32, coordy * 32)
+                    #tile.rect = tile.surface.get_rect()
+                    #tile.rect.move_ip(coordx * 32, coordy * 32)
+                    tile.x = coordx * 32
+                    tile.y = coordy * 32
                     tile.nombre = tile_seleccionado.nombre
                     tile.tipo = tile_seleccionado.tipo
                     tile.caminable = tile_seleccionado.caminable
@@ -75,8 +73,10 @@ class Pincel(pygame.sprite.Sprite):
 
                             tile = Tile()
                             tile.surface = tile_seleccionado.surface.copy()
-                            tile.rect = tile.surface.get_rect()
-                            tile.rect.move_ip(j * 32, i * 32)
+                            #tile.rect = tile.surface.get_rect()
+                            #tile.rect.move_ip(j * 32, i * 32)
+                            tile.x = j * 32
+                            tile.y = i * 32
                             tile.nombre = tile_seleccionado.nombre
                             tile.tipo = tile_seleccionado.tipo
                             tile.caminable = tile_seleccionado.caminable
@@ -107,8 +107,10 @@ class Pincel(pygame.sprite.Sprite):
 
                             tile = Tile()
                             tile.surface = tile_seleccionado.surface.copy()
-                            tile.rect = tile.surface.get_rect()
-                            tile.rect.move_ip(j * 32, i * 32)
+                            #tile.rect = tile.surface.get_rect()
+                            #tile.rect.move_ip(j * 32, i * 32)
+                            tile.x = j * 32
+                            tile.y = i * 32
                             tile.nombre = tile_seleccionado.nombre
                             tile.tipo = tile_seleccionado.tipo
                             tile.caminable = tile_seleccionado.caminable

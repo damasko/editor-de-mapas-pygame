@@ -11,6 +11,7 @@ class CajaTexto(object):
         self.texto = ""
         self.surface = pygame.image.load("res/caja.png")
         self.surface = pygame.transform.scale(self.surface, (tamx, tamy)).convert()
+        self.background = self.surface.copy()
         self.rect = self.surface.get_rect()
         self.rect.move_ip(posx, posy)
         self.fijado = False
@@ -35,12 +36,11 @@ class CajaTexto(object):
 
     def update(self, raton_coordx, raton_coordy, lista_eventos):
 
-        # mal mal mal, no encuentro la manera de resetear la surface, segun sdl
-        # deberia haber un *dstrect que resetear pero no se como acceder en python,
-        # esta es la forma mas cutre y menos eficiente que pueda imaginar :D
-
-        self.surface = pygame.image.load("res/caja.png")
-        self.surface = pygame.transform.scale(self.surface, (self.tamx, self.tamy)).convert()
+        # no se puede alterar el texto, ya que una vez hecho el blit
+        # la otra surface se vuelve parte de la surface destino, por lo
+        # que no se puede actualizar el texto. La solucion es tener un
+        # background que lo cargue antes, y luego rendear de nuevo el texto O.o
+        self.surface.blit(self.background, (0, 0))
         self.surface.blit(self.fuente.render(self.texto, True, (0, 0, 0)),
                     (15, 15))
 

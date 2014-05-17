@@ -31,13 +31,13 @@ class Mapa(object):
         self.grupo_mundo = pygame.sprite.Group()
         #self.grupo_enemigos = pygame.sprite.Group()
 
-
     def crear_tiles_suelos(self):
 
         for i in range(len(self.tileset1)):
             linea = []
             for j in range(len(self.tileset1[0])):
                 tile = Tile()
+                #rect = pygame.rect.Rect((j*32, i*32), tile.surface.get_size())
                 if i == 0 and j == 0:
                     #suelo arido
                     tile.nombre = "arido"
@@ -224,27 +224,29 @@ class Mapa(object):
             for j in range(len(self.tileset_enemigos[0])):
                 enemigo = Enemigo()
                 if i == 0 and j == 0:
-                    #suelo arido
+
                     enemigo.nombre = "princesa"
+                    enemigo.vida = 50
+                    enemigo.ataque = 25
                     enemigo.surface = self.tileset_enemigos[0][0].convert_alpha()
 
                 elif i == 0 and j == 1:
-                    # algo:
+
                     enemigo.nombre = "enemigo1"
                     enemigo.surface = self.tileset_enemigos[0][1].convert_alpha()
 
                 elif i == 0 and j == 2:
-                    # algo:
+
                     enemigo.nombre = "enemigo2"
                     enemigo.surface = self.tileset_enemigos[0][2].convert_alpha()
 
                 elif i == 0 and j == 3:
-                    # cesped:
+
                     enemigo.nombre = "enemigo3"
                     enemigo.surface = self.tileset_enemigos[0][3].convert_alpha()
 
                 elif i == 0 and j == 4:
-                    ## madera:
+
                     enemigo.nombre = "enemigo4"
                     enemigo.surface = self.tileset_enemigos[0][4].convert_alpha()
 
@@ -277,28 +279,33 @@ class Mapa(object):
             for j in range(tamx):
 
                 tile = Tile()  # rehuso del objeto tile
-                tile.rect.move_ip(x, y)
+                #tile.rect.move_ip(x, y)
+                rect = pygame.rect.Rect((x, y), tile.surface.get_size())
+                tile.x = x
+                tile.y = y
                 #suelos
                 tile.nombre = "default_suelo"
-                tile.surface = self.tileset1[31][31].convert()
+                tile.surface = self.tileset1[31][31].subsurface(rect)
                 tile.tipo = "#"
                 tile.caminable = False
                 linea_suelos.append(tile)
 
                 #paredes
-                tile = Tile()
-                tile.rect.move_ip(x, y)
+                #tile = Tile()
+                #tile.rect.move_ip(x, y)
                 tile.nombre = "default_pared"
-                tile.surface = self.tileset2[31][31].convert_alpha()
+                tile.surface = self.tileset2[31][31].subsurface(rect)
                 tile.tipo = "$"
                 tile.caminable = True
                 linea_paredes.append(tile)
 
                 #tejados
-                tile = Tile()
-                tile.rect.move_ip(x, y)
+                #tile = Tile()
+                #tile.rect.move_ip(x, y)
+                tile.x = x
+                tile.y = y
                 tile.nombre = "default_tejado"
-                tile.surface = self.tileset3[31][31].convert_alpha()
+                tile.surface = self.tileset3[31][31].subsurface(rect)
                 tile.tipo = "&"
                 tile.caminable = True
                 linea_tejados.append(tile)
@@ -316,10 +323,6 @@ class Mapa(object):
         self.parsear_paredes()
         self.parsear_tejados()
         self.parsear_enemigos()
-        #print "layer1 " + str(len(self.layer1))
-        #print "layer2 " + str(len(self.layer2[0]))
-        #print "layer3 " + str(len(self.layer3[0]))
-
 
     def leer_ascii_map(self, ascii_map, mundonombre):
         self.clear_arrays()
@@ -333,7 +336,7 @@ class Mapa(object):
         tejados = True
         enemigos = True
 
-        i = 0
+        i = 2
         while i < len(lista):
             if nombre:
                 if "@end_nombre" in lista[i]:
@@ -391,7 +394,6 @@ class Mapa(object):
             enemigo.rect.y = int(elemento[2])
             enemigo.capa = int(elemento[3])
             self.grupo_mundo.add(enemigo)
-            #self.grupo_enemigos.add(enemigo)
             self.enemigos.append(enemigo)
 
         return self.enemigos
@@ -439,7 +441,9 @@ class Mapa(object):
                     tile.surface = self.tileset1[31][31]
                     tile.tipo = "#"
                     tile.caminable = False
-                tile.rect.move_ip(x, y)
+                #tile.rect.move_ip(x, y)
+                tile.x = x
+                tile.y = y
                 linea.append(tile)
                 x = x + 32
             self.layer1.append(linea)
@@ -490,8 +494,9 @@ class Mapa(object):
                     tile.surface = self.tileset2[31][31].convert_alpha()
                     tile.tipo = "$"
                     tile.caminable = False
-                tile.rect.move_ip(x, y)
-                #tile.surface.set_colorkey((255, 0, 255))
+                #tile.rect.move_ip(x, y)
+                tile.x = x
+                tile.y = y
                 linea.append(tile)
                 x = x + 32
             self.layer2.append(linea)
@@ -542,8 +547,9 @@ class Mapa(object):
                     tile.surface = self.tileset3[31][31].convert_alpha()
                     tile.tipo = "$"
                     tile.caminable = False
-                tile.rect.move_ip(x, y)
-                #tile.surface.set_colorkey((255, 0, 255))
+                #tile.rect.move_ip(x, y)
+                tile.x = x
+                tile.y = y
                 linea.append(tile)
                 x = x + 32
             self.layer3.append(linea)

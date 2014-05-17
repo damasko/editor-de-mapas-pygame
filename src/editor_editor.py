@@ -7,11 +7,14 @@ from chat_editor import Chat
 from mundo_editor import Mundo
 from ayuda_editor import Ayuda
 from nuevo_mundo import NuevoMundo
-from caja_texto import CajaTexto
+from menu_carga import MenuCarga
 from eventhandler import EventHandler
 
 
 class Editor(object):
+
+    # No te olvides de quitar las rutas hardcodeadas y meterlas
+    # en un archivo de configuracion
 
     def __init__(self, nombre="Editor", resolucion=(800, 600)):
 
@@ -28,9 +31,10 @@ class Editor(object):
         # de momento menu_nmundo se queda aqui ya veremos si es mejor moverlo a
         # menu como estaba antes
         self.menu_nmundo = NuevoMundo(self.resolucion[0] / 2,
-                    self.resolucion[1] / 2, 10, 10, self.raton, self.mundo)
-
-        self.menu = Menu(self.resolucion, self.raton, self.mundo, self.menu_nmundo)
+                    self.resolucion[1] / 2, 10, 10, self.raton, self.mundo, self.camara)
+        self.menu_carga = MenuCarga(self.resolucion, self.raton, self.mundo, self.camara)
+        self.menu = Menu(self.resolucion, self.raton, self.mundo,
+                            self.menu_nmundo, self.menu_carga)
         self.chat = Chat(self.resolucion, self.mundo.tiles_suelos1[31][31], self.mundo.capa,
                       self.mundo.modo_entidad, self.camara.pincel.borrar,
                        self.mundo.aut_save)
@@ -51,16 +55,18 @@ class Editor(object):
         self.reloj = pygame.time.Clock()
 
         while self.menu.salir != 1:
-
+            print self.camara.rect.x
+            # ticks del reloj
             self.reloj.tick(40)
+            # actualizacion eventos de teclado
             self.eventhandler.update()
 
-            if self.menu_nmundo.activo:
-
-                self.menu_activo()
-
+            # actualizacion del raton (raton + puntero)
+            # (puntero es un rect muy pequeno que sigue a raton para darle mas precision)
             self.raton.update()
+            # tile seleccionado:
             if not self.mundo.modo_entidad:
+                # seleccion de tile del marco del menu
                 if self.mundo.capa == 1:
                     self.tile_activo = self.menu.marco_tileset.tile_seleccionado_suelos
                 elif self.mundo.capa == 3:
@@ -68,28 +74,22 @@ class Editor(object):
                 elif self.mundo.capa == 4:
                     self.tile_activo = self.menu.marco_tileset.tile_seleccionado_tejados
             else:
+                # seleccion del tile que representa un enemigo
                 self.tile_activo = self.menu.marco_tileset.tile_seleccionado_enemigos
             self.tile_activo_paredes = self.menu.marco_tileset.tile_seleccionado_paredes
 
             self.menu.update()
-            # /*
 
-            # para ahorrar el blit del menu cuando no esta activo, el problema es que que
-            # la tecla no actualiza bien el marco de tilesets si este no se encuentra
-            # focuseado(logico) revisar
-            #if self.menu.focused():
-                #self.dibuja(self.menu)
-                #self.primera_menu = True
+            # /* anotacion1
+            # /** anotacion2
 
-            #else:
-                #if self.primera_menu:
-                    #self.dibuja(self.menu)
-                    #self.primera_menu = False
-
+            ########### dibujar sobre la pantalla el menu, actualizacion de chat y mostrarlo
             self.dibuja(self.menu)
             self.muestra_chat()
             self.dibuja(self.chat)
-            if not self.camara.focused():
+            ###########
+
+            if not self.camara.focused():    # /**
                 self.pantalla.blit(self.raton.surface, (self.raton.puntero.x, self.raton.puntero.y))
                 if self.primera_camara:
                     self.pantalla.blit(self.camara.render(), (0, 0))
@@ -100,6 +100,17 @@ class Editor(object):
                 self.pantalla.blit(self.camara.render(), (0, 0))
 
                 self.primera_camara = True
+
+            # contador para guardar con autosave, esta en ticks
+
+            # menu para crear nuevo mundo
+            if self.menu_nmundo.activo:
+
+                self.menu_activo()
+
+            if self.menu_carga.activo:
+
+                self.menu_carga_activo()
 
             if self.mundo.aut_save:
                 self.cont_tiempo = self.cont_tiempo + 1
@@ -121,13 +132,10 @@ class Editor(object):
         self.chat.imprime()
 
     def menu_activo(self):
-        ####self.surface_borra = pygame.surface.Surface((1, 1))
+
         while self.menu_nmundo.activo:
 
-            # recuerda que no puedes estar constantemente llamando a pygame.event.get
-            # ya que vacia la cola de eventos en cada llamada y devuelve una
-            # lista, mejor almacenarlo en este caso, pasarsela a menu_nmundo y
-            # que el compruebe los textinput, que requieren ver eventos de teclado
+            # /***
             eventos = pygame.event.get()
             self.pantalla.fill((0, 0, 0))
             self.reloj.tick(35)
@@ -136,12 +144,25 @@ class Editor(object):
             self.menu_nmundo.render()
             self.dibuja(self.menu_nmundo)
 
-            # ULTIMO: TIENES QUE VER POR QUE NO SE ACTUALIZA CORRECTAMENTE LOS TEXTBOX
-            # EL PROBLEMA ES POR PERTENECER A OTRA CLASE, al hacer el blit interno
-            # no lo actualiza bien la pantalla
+            # no actualiza bien la pantalla, consultar SDL_BlitSurface(concretamente
+            # eliminar el puntero a *dstrect)
 
             self.pantalla.blit(self.raton.surface, (self.raton.puntero.x, self.raton.puntero.y))
             pygame.display.update()
+
+    def menu_carga_activo(self):
+
+        self.menu_carga.build_menu()
+        while self.menu_carga.activo:
+            eventos = pygame.event.get()
+            self.pantalla.fill((0, 0, 0))
+            self.reloj.tick(35)
+            self.raton.update()
+            self.menu_carga.update()
+            self.dibuja(self.menu_carga)
+            self.pantalla.blit(self.raton.surface, (self.raton.puntero.x, self.raton.puntero.y))
+            pygame.display.update()
+        self.pantalla.blit(self.camara.render(), (0, 0))
 
     # /*
     # por lo que veo reduciendo el blit se reduce muchisimo el uso de cpu
@@ -151,3 +172,26 @@ class Editor(object):
     # vez, aunque hay que estar constantemente reasignando la variable,
     # el beneficio es mucho mayor. (el menu no se actualiza correctamente por las
     # teclas)
+
+    # /**
+    # para ahorrar el blit del menu cuando no esta activo, el problema es que que
+    # la tecla no actualiza bien el marco de tilesets si este no se encuentra
+    # focuseado(logico) revisar. Con la camara, al no tener que actualizarse por teclado
+    # como es el caso del marco, funciona bastante bien
+
+    #if self.menu.focused():
+                #self.dibuja(self.menu)
+                #self.primera_menu = True
+
+            #else:
+
+                #if self.primera_menu:
+                    #self.dibuja(self.menu)
+                    #self.primera_menu = False
+
+
+    # /***
+    # recuerda que no puedes estar constantemente llamando a pygame.event.get
+    # ya que vacia la cola de eventos en cada llamada y devuelve una
+    # lista, mejor almacenarlo en este caso, pasarsela a menu_nmundo y
+    # que el compruebe los textinput, que requieren ver eventos de teclado

@@ -7,10 +7,11 @@ from boton_editor import Boton
 #Clase para el menu de creacion de nuevo mundo
 class NuevoMundo(pygame.sprite.Sprite):
 
-    def __init__(self, tamx, tamy, posx, posy, raton, mundo):
+    def __init__(self, tamx, tamy, posx, posy, raton, mundo, camara):
 
         super(NuevoMundo, self).__init__()
         self.mundo = mundo
+        self.camara = camara
         self.surface = pygame.image.load("res/mundonuevo.png").convert()
         self.surface = pygame.transform.scale(self.surface, (tamx, tamy)).convert()
         self.rect = self.surface.get_rect()
@@ -29,10 +30,13 @@ class NuevoMundo(pygame.sprite.Sprite):
         self.caja_ancho = CajaTexto(self.rect.width / 2 - self.offset, 50,
                 self.rect.centerx, self.caja_alto.rect.bottomleft[1])
 
-        self.boton_aceptar = Boton(self.rect.width/4, self.rect.height/9,
-                10, self.rect.height - self.rect.height/9 - 10, "aceptar")
+        self.boton_aceptar = Boton(self.rect.width / 4, self.rect.height / 9,
+                10, self.rect.height - self.rect.height / 9 - 10, "aceptar")
 
-        self.boton_cancelar = Boton(self.rect.width/4, self.rect.height/9, self.rect.width - self.rect.width/4 - 10, self.rect.height - self.rect.height/9 - 10, "cancelar")
+        self.boton_cancelar = Boton(self.rect.width / 4, self.rect.height / 9,
+                 self.rect.width - self.rect.width / 4 - 10,
+                 self.rect.height - self.rect.height / 9 - 10, "cancelar")
+
         self.activo = False
         self.raton = raton
         self.eventos = []
@@ -61,11 +65,9 @@ class NuevoMundo(pygame.sprite.Sprite):
             self.activo = False
             if self.comprueba_box():
 
-                # parece que cuando se crea el nuevo mundo este menu pierde la
-                # referencia al antiguo
-                self.mundo = self.mundo.nuevo_mundo(str(self.caja_nombre.texto),
+                self.camara.set_pos(0, 0)
+                self.mundo.nuevo_mundo(str(self.caja_nombre.texto),
                         int(self.caja_alto.texto), int(self.caja_ancho.texto))
-                self.mundo = mundo
 
             else:
 

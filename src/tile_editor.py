@@ -7,7 +7,9 @@ class Tile(pygame.sprite.Sprite):
         super(Tile, self).__init__()
         self.nombre = "default"
         self.surface = pygame.surface.Surface((32, 32)).convert_alpha()
-        self.rect = self.surface.get_rect()
+        #self.rect = self.surface.get_rect()
+        self.x = 0
+        self.y = 0
         self.tipo = "0"
         self.tipo_parent = "0"
         self.caminable = True

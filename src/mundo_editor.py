@@ -46,20 +46,27 @@ class Mundo(object):
     def nuevo_mundo(self, nombre, tamx, tamy):
 
         #self.clear_arrays()
+        # parece que layer1 no se vacia bien con self.mapa.clear_arrays()
         self.nombre = nombre
-        print self.nombre
+        self.mapa.grupo_mundo.empty()
         self.mapa.crear_mapa(tamx, tamy)
-        self.mapa.layer1 = [] # parece que layer1 no se vacia bien con self.mapa.clear_arrays()
+        self.mapa.layer1 = []
         self.mapa.layer2 = []
         self.mapa.layer3 = []
+        self.mapa_suelos1 = []
+        self.mapa_paredes = []
+        self.mapa_tejados = []
+        self.mapa_enemigos = []
         self.mapa_suelos1 = self.mapa.parsear_suelos()
         self.mapa_paredes = self.mapa.parsear_paredes()
         self.mapa_tejados = self.mapa.parsear_tejados()
         self.mapa_enemigos = self.mapa.parsear_enemigos()
+        #print "tam grupo enemigos nuevo " + str(len(self.mapa.grupo_mundo))
 
     def cargar_mapa(self, fichero):
 
-        self.clear_arrays()
+        #self.clear_arrays()
+        self.mapa.grupo_mundo.empty()
         self.mapa.layer1 = []
         self.mapa.layer2 = []
         self.mapa.layer3 = []
@@ -72,6 +79,7 @@ class Mundo(object):
         self.mapa_paredes = self.mapa.parsear_paredes()
         self.mapa_tejados = self.mapa.parsear_tejados()
         self.mapa_enemigos = self.mapa.parsear_enemigos()
+        #print "tam grupo enemigos cargar " + str(len(self.mapa.grupo_mundo))
 
     def grabar(self, nombre):
 

@@ -16,7 +16,7 @@ class Tileset(object):
     def cortar_tileset(self):
 
         self.imagen = pygame.image.load(self.imagen).convert_alpha()
-        self.imagen.set_colorkey(self.colorkey)
+        #self.imagen.set_colorkey(self.colorkey)
         imagen_ancho, imagen_alto = self.imagen.get_size()
 
         for y in range(0, imagen_alto / self.tilesize_x):
