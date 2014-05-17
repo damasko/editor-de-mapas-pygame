@@ -7,7 +7,8 @@ from chat_editor import Chat
 from mundo_editor import Mundo
 from ayuda_editor import Ayuda
 from nuevo_mundo import NuevoMundo
-#from eventhandler import EventHandler
+from caja_texto import CajaTexto
+from eventhandler import EventHandler
 
 
 class Editor(object):
@@ -34,6 +35,8 @@ class Editor(object):
                       self.mundo.modo_entidad, self.camara.pincel.borrar,
                        self.mundo.aut_save)
 
+        self.eventhandler = EventHandler(self)
+
         self.cambio = False
         self.fullscreen = False
         self.primera_menu = True
@@ -50,110 +53,7 @@ class Editor(object):
         while self.menu.salir != 1:
 
             self.reloj.tick(40)
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    self.menu.salir = True
-
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if (event.dict['button'] == 4):
-                        if self.camara.pincel.tam < 3:
-                            self.camara.pincel.tam = self.camara.pincel.tam + 1
-                    if (event.dict['button'] == 5):
-                        if self.camara.pincel.tam > 1:
-                            self.camara.pincel.tam = self.camara.pincel.tam - 1
-
-                if event.type == pygame.KEYDOWN:
-
-                    if event.key == K_F11:
-                        if not self.fullscreen:
-                            self.pantalla = pygame.display.set_mode(self.resolucion,
-                                     DOUBLEBUF | FULLSCREEN)
-                            self.fullscreen = True
-                        else:
-                            self.pantalla = pygame.display.set_mode(self.resolucion,
-                                 DOUBLEBUF)
-                            self.fullscreen = False
-
-                    if event.key == K_F1:
-                        self.menuayuda.run = True
-                        while self.menuayuda.run:
-                            self.menuayuda.ejecutar()
-                            self.dibuja(self.menuayuda)
-                            for event in pygame.event.get():
-                                if event.type == pygame.KEYDOWN:
-                                    if event.key == K_F1:
-                                        self.menuayuda.run = False
-                            pygame.display.update()
-
-                    if event.key == K_s:
-                        self.mundo.grabar(self.mundo.nombre)
-
-                    if event.key == K_PLUS:
-                        if self.camara.pincel.tam < 3:
-                            self.camara.pincel.tam = self.camara.pincel.tam + 1
-
-                    if event.key == K_MINUS:
-                        if self.camara.pincel.tam > 1:
-                            self.camara.pincel.tam = self.camara.pincel.tam - 1
-
-                    if event.key == K_e:
-                        if not self.mundo.modo_entidad:
-                            self.menu.marco_tileset.default = True
-                        else:
-                            if self.camara.pincel.borrar:
-                                self.camara.pincel.borrar = False
-                            else:
-                                self.camara.pincel.borrar = True
-
-                    if event.key == K_a:
-                        if self.mundo.aut_save:
-                            self.mundo.aut_save = False
-                        else:
-                            self.mundo.aut_save = True
-
-                    if event.key == K_1:
-                        self.menu.marco_tileset.capa = 1
-                        self.mundo.capa = 1
-
-                    if event.key == K_3:
-                        self.menu.marco_tileset.capa = 3
-                        self.mundo.capa = 3
-
-                    if event.key == K_4:
-                        self.menu.marco_tileset.capa = 4
-                        self.mundo.capa = 4
-
-                    if event.key == K_LCTRL:
-                        if not self.menu.marco_tileset.modo_entidad:
-                            self.menu.marco_tileset.modo_entidad = True
-                            self.mundo.modo_entidad = True
-                        else:
-                            self.menu.marco_tileset.modo_entidad = False
-                            self.mundo.modo_entidad = False
-
-                    if event.key == K_SPACE:
-                        if self.mundo.capa == 3:
-                            if self.camara.mostrar_capa3:
-                                self.camara.mostrar_capa3 = False
-                            else:
-                                self.camara.mostrar_capa3 = True
-                    #borrar
-                    if event.key == K_m:
-
-                        self.mundo.cargar_mapa("mapas/mapa_default.txt")
-                        self.camara.recargar(self.mundo, self.raton, self.resolucion)
-                        print len(self.ma)
-                    ###
-
-                    if event.key == K_LALT:
-                        if self.mundo.capa == 4:
-                            if self.camara.mostrar_capa4:
-                                self.camara.mostrar_capa4 = False
-                            else:
-                                self.camara.mostrar_capa4 = True
-                    if pygame.key.get_pressed()[K_l] and pygame.key.get_pressed()[K_x]:
-
-                        self.camara.tile_base(self.tile_activo)
+            self.eventhandler.update()
 
             if self.menu_nmundo.activo:
 
@@ -172,13 +72,7 @@ class Editor(object):
             self.tile_activo_paredes = self.menu.marco_tileset.tile_seleccionado_paredes
 
             self.menu.update()
-            # por lo que veo reduciendo el blit se reduce muchisimo el uso de cpu
-            # asi que uso el metodo focused para que haga el blit sobre la parte
-            # activa, ademas uso una variable para que el raton desaparezca si no
-            # esta focuseada, es decir, sin esto el raton queda dibujado de la anterior
-            # vez, aunque hay que estar constantemente reasignando la variable,
-            # el beneficio es mucho mayor. (el menu no se actualiza correctamente por las
-            # teclas)
+            # /*
 
             # para ahorrar el blit del menu cuando no esta activo, el problema es que que
             # la tecla no actualiza bien el marco de tilesets si este no se encuentra
@@ -212,7 +106,7 @@ class Editor(object):
                 if self.cont_tiempo == 10000:
                     self.mundo.grabar("temporal")
                     self.cont_tiempo = 0
-            #pygame.display.flip()
+
             pygame.display.update()
 
     def dibuja(self, ente):
@@ -227,7 +121,7 @@ class Editor(object):
         self.chat.imprime()
 
     def menu_activo(self):
-
+        ####self.surface_borra = pygame.surface.Surface((1, 1))
         while self.menu_nmundo.activo:
 
             # recuerda que no puedes estar constantemente llamando a pygame.event.get
@@ -235,16 +129,25 @@ class Editor(object):
             # lista, mejor almacenarlo en este caso, pasarsela a menu_nmundo y
             # que el compruebe los textinput, que requieren ver eventos de teclado
             eventos = pygame.event.get()
-            self.reloj.tick(35)
             self.pantalla.fill((0, 0, 0))
+            self.reloj.tick(35)
             self.raton.update()
-            self.menu_nmundo.update(eventos)
+            self.menu_nmundo.update(eventos, self.mundo)
             self.menu_nmundo.render()
-
             self.dibuja(self.menu_nmundo)
+
             # ULTIMO: TIENES QUE VER POR QUE NO SE ACTUALIZA CORRECTAMENTE LOS TEXTBOX
-            # PARECE QUE EL PROBLEMA ES POR PERTENECER A OTRA CLASE :s
-            #self.dibuja(self.menu_nmundo.caja_nombre)
+            # EL PROBLEMA ES POR PERTENECER A OTRA CLASE, al hacer el blit interno
+            # no lo actualiza bien la pantalla
 
             self.pantalla.blit(self.raton.surface, (self.raton.puntero.x, self.raton.puntero.y))
             pygame.display.update()
+
+    # /*
+    # por lo que veo reduciendo el blit se reduce muchisimo el uso de cpu
+    # asi que uso el metodo focused para que haga el blit sobre la parte
+    # activa, ademas uso una variable para que el raton desaparezca si no
+    # esta focuseada, es decir, sin esto el raton queda dibujado de la anterior
+    # vez, aunque hay que estar constantemente reasignando la variable,
+    # el beneficio es mucho mayor. (el menu no se actualiza correctamente por las
+    # teclas)

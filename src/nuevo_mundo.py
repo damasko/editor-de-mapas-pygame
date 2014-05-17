@@ -20,16 +20,14 @@ class NuevoMundo(pygame.sprite.Sprite):
         self.fuente = pygame.font.SysFont('Arial', 14)
         self.offset = 20
         self.nombre = "Nombre"
-        self.caja_nombre = CajaTexto(self.rect.width / 2 - self.offset, 50, self.rect.x + 10, self.rect.y + 10)
+        self.caja_nombre = CajaTexto(self.rect.width / 2 - self.offset, 50, self.rect.centerx, self.rect.y + 10)
 
-        self.ancho = "Ancho"
-        self.caja_ancho = CajaTexto(self.rect.width / 2,
-                    self.rect.height / 12, self.rect.x - self.rect.x / 2,
-                    self.caja_nombre.rect.bottomleft[1])
         self.alto = "Alto"
-        self.caja_alto = CajaTexto(self.rect.width / 2,
-                    self.rect.height / 12, self.rect.x - self.rect.x / 2,
-                    self.caja_ancho.rect.bottomleft[1])
+        self.caja_alto = CajaTexto(self.rect.width / 2 - self.offset, 50,
+                self.rect.centerx, self.caja_nombre.rect.bottomleft[1])
+        self.ancho = "Ancho"
+        self.caja_ancho = CajaTexto(self.rect.width / 2 - self.offset, 50,
+                self.rect.centerx, self.caja_alto.rect.bottomleft[1])
 
         self.boton_aceptar = Boton(self.rect.width/4, self.rect.height/9,
                 10, self.rect.height - self.rect.height/9 - 10, "aceptar")
@@ -46,7 +44,7 @@ class NuevoMundo(pygame.sprite.Sprite):
         if self.raton.puntero.colliderect(self):
             return True
 
-    def update(self, eventos):
+    def update(self, eventos, mundo):
 
         self.boton_aceptar.imprime()
         self.boton_cancelar.imprime()
@@ -54,8 +52,8 @@ class NuevoMundo(pygame.sprite.Sprite):
         self.boton_cancelar.click(self.raton.puntero.x, self.raton.puntero.y)
 
         self.caja_nombre.update(self.raton.puntero.x, self.raton.puntero.y, eventos)
-        #self.caja_alto.update(self.raton.puntero.x, self.raton.puntero.y, eventos)
-        #self.caja_ancho.update(self.raton.puntero.x, self.raton.puntero.y, eventos)
+        self.caja_alto.update(self.raton.puntero.x, self.raton.puntero.y, eventos)
+        self.caja_ancho.update(self.raton.puntero.x, self.raton.puntero.y, eventos)
 
         if self.boton_aceptar.variable == 1:
 
@@ -63,8 +61,15 @@ class NuevoMundo(pygame.sprite.Sprite):
             self.activo = False
             if self.comprueba_box():
 
+                # parece que cuando se crea el nuevo mundo este menu pierde la
+                # referencia al antiguo
                 self.mundo = self.mundo.nuevo_mundo(str(self.caja_nombre.texto),
                         int(self.caja_alto.texto), int(self.caja_ancho.texto))
+                self.mundo = mundo
+
+            else:
+
+                print "dato erroneo"
 
             self.clear_box()
 
@@ -78,28 +83,25 @@ class NuevoMundo(pygame.sprite.Sprite):
 
         self.surface.blit(self.caja_nombre.surface,
                         (self.caja_nombre.rect.x, self.caja_nombre.rect.y))
-        #self.surface.blit(self.caja_ancho.surface,
-                        #(self.caja_ancho.rect.x, self.caja_ancho.rect.y))
+        self.surface.blit(self.caja_ancho.surface,
+                        (self.caja_ancho.rect.x, self.caja_ancho.rect.y))
 
-        #self.surface.blit(self.caja_alto.surface,
-                        #(self.caja_alto.rect.x, self.caja_alto.rect.y))
+        self.surface.blit(self.caja_alto.surface,
+                        (self.caja_alto.rect.x, self.caja_alto.rect.y))
 
         self.surface.blit(self.boton_aceptar.surface,
                         (self.boton_aceptar.rect.x, self.boton_aceptar.rect.y))
         self.surface.blit(self.boton_cancelar.surface,
                         (self.boton_cancelar.rect.x, self.boton_cancelar.rect.y))
 
+        # valores puestos a mano ojo
         self.surface.blit(self.fuente.render(self.nombre, True,
-                        (255, 255, 255)), (self.caja_nombre.rect.x,
-                            self.caja_nombre.rect.y - 30))
-        self.surface.blit(self.fuente.render(self.ancho, True,
-                        (255, 255, 255)), (self.caja_ancho.rect.x,
-                            self.caja_ancho.rect.y - 30))
-
+                        (255, 255, 255)), (150, 30))
         self.surface.blit(self.fuente.render(self.alto, True,
-                        (255, 255, 255)), (self.caja_alto.rect.x,
-                            self.caja_alto.rect.y - 30))
+                        (255, 255, 255)), (150, 80))
 
+        self.surface.blit(self.fuente.render(self.ancho, True,
+                        (255, 255, 255)), (150, 130))
 
     def clear_box(self):
 
@@ -118,11 +120,10 @@ class NuevoMundo(pygame.sprite.Sprite):
         if self.caja_alto.texto == "":
             self.caja_alto = "25"
 
-        if int(self.caja_ancho.texto) >= 25:
+        if self.caja_ancho.texto.isdigit():
             dato_valido1 = True
-        if int(self.caja_alto.texto) >= 25:
+        if self.caja_alto.texto.isdigit():
             dato_valido2 = True
-
         if dato_valido1 and dato_valido2:
             return True
 

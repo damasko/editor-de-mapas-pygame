@@ -257,7 +257,7 @@ class Mapa(object):
 
         return self.tiles_enemigos
 
-    def crear_mapa(self, tamx, tamy):
+    def crear_mapa(self, tamy, tamx):
 
         # aprovechando que tanto el mapa paredes, suelos y tejados debe tener el mismo tamano
         # me aseguro reseteando los arrays aunque puede que no sea necesario mejor evitar
@@ -274,7 +274,7 @@ class Mapa(object):
             linea_suelos = []  # suelos
             linea_paredes = []  # paredes
             linea_tejados = [] # tejados
-            for j in range(tamy):
+            for j in range(tamx):
 
                 tile = Tile()  # rehuso del objeto tile
                 tile.rect.move_ip(x, y)

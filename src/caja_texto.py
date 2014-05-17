@@ -16,10 +16,14 @@ class CajaTexto(object):
         self.fijado = False
         #fuente provisional
         self.fuente = pygame.font.SysFont('Arial', 14)
-        # tposx y tposy indican donde se va a pintar el texto
+
+        # tposx y tposy indican donde se va a pintar el texto de momento no se usa
         self.tposx = 0
         self.tposy = 0
+        self.tamx = tamx
+        self.tamy = tamy
         self.centrary()
+        self.traza = 0
 
     def clear(self):
 
@@ -31,8 +35,14 @@ class CajaTexto(object):
 
     def update(self, raton_coordx, raton_coordy, lista_eventos):
 
-        self.surface.blit(self.fuente.render(self.texto, True,
-                                (0, 0, 255)), (10, 10))
+        # mal mal mal, no encuentro la manera de resetear la surface, segun sdl
+        # deberia haber un *dstrect que resetear pero no se como acceder en python,
+        # esta es la forma mas cutre y menos eficiente que pueda imaginar :D
+
+        self.surface = pygame.image.load("res/caja.png")
+        self.surface = pygame.transform.scale(self.surface, (self.tamx, self.tamy)).convert()
+        self.surface.blit(self.fuente.render(self.texto, True, (0, 0, 0)),
+                    (15, 15))
 
         # con focused y fijado conseguimos que al darle click al box este se mantenga
         # activo, si hacemos click fuera de el se desactiva
