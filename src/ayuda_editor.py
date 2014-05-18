@@ -5,12 +5,13 @@ class Ayuda(pygame.sprite.Sprite):
 
     def __init__(self, pantalla_tam):
         super(Ayuda, self).__init__()
-
+        self.offset = 10
         pygame.font.init()
         self.fuente = pygame.font.SysFont('Arial', 20)
         self.surface = pygame.image.load("res/ayuda.png").convert_alpha()
         self.surface = pygame.transform.scale(self.surface, (pantalla_tam[0] / 2,
                         pantalla_tam[1])).convert()
+        self.surface_bg = self.surface.copy()
         self.rect = self.surface.get_rect()
         self.rect.centerx = pantalla_tam[0] / 2
         self.rect.y = 0
@@ -53,11 +54,12 @@ class Ayuda(pygame.sprite.Sprite):
         self.array_textos.append(self.salir)
 
     def ejecutar(self):
-        self.offset = 10
+
         i = 25
-        self.surface.fill((0, 0, 0))
+        #self.surface.fill((0, 0, 0))
+        self.surface.blit(self.surface_bg, (0, 0))
         for texto in self.array_textos:
 
-            self.surface.blit(self.fuente.render(texto, True, (255, 0, 0)),
+            self.surface.blit(self.fuente.render(texto, True, (255, 255, 0)),
                                  (self.offset, self.offset + i))
             i += 25

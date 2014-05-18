@@ -37,15 +37,8 @@ class EventHandler(object):
                         self.motor.fullscreen = False
 
                 if event.key == K_F1:
+                    print "entro"
                     self.motor.menuayuda.run = True
-                    while self.motor.menuayuda.run:
-                        self.motor.menuayuda.ejecutar()
-                        self.motor.dibuja(self.motor.menuayuda)
-                        for event in pygame.event.get():
-                            if event.type == pygame.KEYDOWN:
-                                if event.key == K_F1:
-                                    self.motor.menuayuda.run = False
-                        pygame.display.update()
 
                 if event.key == K_s:
                     self.motor.mundo.grabar(self.motor.mundo.nombre)

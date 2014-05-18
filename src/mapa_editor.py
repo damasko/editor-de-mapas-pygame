@@ -325,25 +325,21 @@ class Mapa(object):
         self.parsear_tejados()
         self.parsear_enemigos()
 
-    def leer_ascii_map(self, ascii_map, mundonombre):
+    def leer_ascii_map(self, ascii_map, mundo):
         self.clear_arrays()
         a = open(ascii_map, 'r')
 
         lista = list(a)
         a.close()
-        nombre = True
         suelos = True
         paredes = True
         tejados = True
         enemigos = True
+        mundo.nombre = lista[0]
 
         i = 2
         while i < len(lista):
-            if nombre:
-                if "@end_nombre" in lista[i]:
-                    nombre = False
-                else:
-                    mundonombre = lista[i]
+
             if suelos:
                 if "@end_suelos" in lista[i]:
                     suelos = False

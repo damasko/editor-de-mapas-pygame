@@ -73,7 +73,7 @@ class Mundo(object):
         self.tiles_paredes = []
         self.tiles_tejados = []
         self.tiles_enemigos = []
-        self.mapa.leer_ascii_map(fichero, self.nombre)
+        self.mapa.leer_ascii_map(fichero, self)
         self.mapa_suelos1 = self.mapa.parsear_suelos()
         self.mapa_paredes = self.mapa.parsear_paredes()
         self.mapa_tejados = self.mapa.parsear_tejados()

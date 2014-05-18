@@ -64,10 +64,9 @@ class NuevoMundo(pygame.sprite.Sprite):
             self.boton_aceptar.variable = 0
             self.activo = False
             if self.comprueba_box():
-
+                self.camara.recargar(self.mundo)
                 self.mundo.nuevo_mundo(str(self.caja_nombre.texto),
                         int(self.caja_alto.texto), int(self.caja_ancho.texto))
-                self.camara.recargar(self.mundo)
 
             else:
 

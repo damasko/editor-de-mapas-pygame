@@ -78,7 +78,7 @@ class Editor(object):
             self.tile_activo_paredes = self.menu.marco_tileset.tile_seleccionado_paredes
 
             self.menu.update()
-
+            #print self.mundo.nombre
             # /* anotacion1
             # /** anotacion2
 
@@ -109,13 +109,17 @@ class Editor(object):
 
                 self.menu_carga_activo()
 
-            # contador para guardar con autosave, esta en ticks
+            if self.menuayuda.run:
+
+                self.menu_ayuda()
+
+            # contador para guardar con autosave, esta en milisegundos
             if self.mundo.aut_save:
                 self.cont_tiempo = self.cont_tiempo + 1
-                if self.cont_tiempo == 10000:
+                if self.cont_tiempo == 8000:
                     self.mundo.grabar("temporal")
                     self.cont_tiempo = 0
-
+                    print "Mapa guardado en temporal.txt"
             pygame.display.update()
 
     def dibuja(self, ente):
@@ -128,6 +132,19 @@ class Editor(object):
                  self.camara.mostrar_capa3, self.camara.mostrar_capa4,
                  self.mundo.modo_entidad, self.camara.pincel.borrar, self.mundo.aut_save)
         self.chat.imprime()
+
+
+    def menu_ayuda(self):
+
+        while self.menuayuda.run:
+            self.menuayuda.ejecutar()
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == K_F1:
+                        self.menuayuda.run = False
+            self.dibuja(self.menuayuda)
+            pygame.display.update()
+        self.pantalla.blit(self.camara.render(), (0, 0))
 
     def menu_activo(self):
 
@@ -144,6 +161,7 @@ class Editor(object):
             self.pantalla.blit(self.raton.surface, (self.raton.puntero.x, self.raton.puntero.y))
             self.menu.update()
             pygame.display.update()
+        self.pantalla.blit(self.camara.render(), (0, 0))
 
     def menu_carga_activo(self):
 
@@ -153,16 +171,12 @@ class Editor(object):
             self.pantalla.fill((0, 0, 0))
             self.reloj.tick(35)
             self.raton.update()
-            self.menu_carga.update()
+            self.menu_carga.update(eventos)
             self.dibuja(self.menu_carga)
             self.pantalla.blit(self.raton.surface, (self.raton.puntero.x, self.raton.puntero.y))
             self.menu.update()
             pygame.display.update()
         self.pantalla.blit(self.camara.render(), (0, 0))
-
-        # ULTIMO: La camara no actualiza bien su posicion a 0,0 cuando se crea o carga
-        # el mapa dando lugar a un error de indice al cargar fuera
-        # de lo que puede dibujar, buscar solucion
 
     # /*
     # por lo que veo reduciendo el blit se reduce muchisimo el uso de cpu
