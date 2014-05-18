@@ -84,24 +84,24 @@ class Mapa(object):
                 elif i == 2 and j == 1:
                     tile.nombre = "agua chunga2"
                     tile.surface = self.tileset1[2][1]
-                    tile.tipo = "u"
+                    tile.tipo = "i"
                     tile.caminable = False
                 elif i == 3 and j == 0:
                     tile.nombre = "agua chunga3"
                     tile.surface = self.tileset1[3][0]
-                    tile.tipo = "u"
+                    tile.tipo = "j"
                     tile.caminable = False
 
                 elif i == 3 and j == 1:
                     tile.nombre = "agua chunga4"
                     tile.surface = self.tileset1[3][1]
-                    tile.tipo = "u"
+                    tile.tipo = "k"
                     tile.caminable = False
 
                 elif i == 2 and j == 2:
                     tile.nombre = "hielo"
                     tile.surface = self.tileset1[2][2]
-                    tile.tipo = "u"
+                    tile.tipo = "h"
                     tile.caminable = False
 
                 elif i == 31 and j == 31:
@@ -166,6 +166,7 @@ class Mapa(object):
                     tile.surface = self.tileset2[31][31]
                     tile.tipo = "$"
                     tile.caminable = True
+
                 linea.append(tile)
             self.tiles_paredes.append(linea)
 
@@ -435,6 +436,36 @@ class Mapa(object):
                     tile.surface = self.tileset1[0][2]
                     tile.tipo = "a"
                     tile.caminable = False
+
+                elif elemento == 'u':
+                    tile.nombre = "agua chunga1"
+                    tile.surface = self.tileset1[2][0]
+                    tile.tipo = "u"
+                    tile.caminable = False
+
+                elif elemento == 'i':
+                    tile.nombre = "agua chunga2"
+                    tile.surface = self.tileset1[2][1]
+                    tile.tipo = "i"
+                    tile.caminable = False
+                elif elemento == 'j':
+                    tile.nombre = "agua chunga3"
+                    tile.surface = self.tileset1[3][0]
+                    tile.tipo = "j"
+                    tile.caminable = False
+
+                elif elemento == 'k':
+                    tile.nombre = "agua chunga4"
+                    tile.surface = self.tileset1[3][1]
+                    tile.tipo = "k"
+                    tile.caminable = False
+
+                elif elemento == 'h':
+                    tile.nombre = "hielo"
+                    tile.surface = self.tileset1[2][2]
+                    tile.tipo = "h"
+                    tile.caminable = False
+
                 else:
                     # algo:
                     tile.nombre = "default_suelo"

@@ -65,9 +65,9 @@ class NuevoMundo(pygame.sprite.Sprite):
             self.activo = False
             if self.comprueba_box():
 
-                self.camara.set_pos(0, 0)
                 self.mundo.nuevo_mundo(str(self.caja_nombre.texto),
                         int(self.caja_alto.texto), int(self.caja_ancho.texto))
+                self.camara.recargar(self.mundo)
 
             else:
 

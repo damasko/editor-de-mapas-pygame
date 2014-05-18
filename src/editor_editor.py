@@ -23,9 +23,8 @@ class Editor(object):
         self.pantalla = pygame.display.set_mode(self.resolucion)
         self.cont_tiempo = 0
 
-        nombre_mundo = "test"
         self.menuayuda = Ayuda(self.resolucion)
-        self.mundo = Mundo(nombre_mundo)
+        self.mundo = Mundo()
         self.raton = Raton("res/puntero.png")
         self.camara = Camara(self.mundo, self.raton, self.resolucion)
         # de momento menu_nmundo se queda aqui ya veremos si es mejor moverlo a
@@ -55,7 +54,7 @@ class Editor(object):
         self.reloj = pygame.time.Clock()
 
         while self.menu.salir != 1:
-            print self.camara.rect.x
+
             # ticks del reloj
             self.reloj.tick(40)
             # actualizacion eventos de teclado
@@ -101,8 +100,6 @@ class Editor(object):
 
                 self.primera_camara = True
 
-            # contador para guardar con autosave, esta en ticks
-
             # menu para crear nuevo mundo
             if self.menu_nmundo.activo:
 
@@ -112,6 +109,7 @@ class Editor(object):
 
                 self.menu_carga_activo()
 
+            # contador para guardar con autosave, esta en ticks
             if self.mundo.aut_save:
                 self.cont_tiempo = self.cont_tiempo + 1
                 if self.cont_tiempo == 10000:
@@ -143,11 +141,8 @@ class Editor(object):
             self.menu_nmundo.update(eventos, self.mundo)
             self.menu_nmundo.render()
             self.dibuja(self.menu_nmundo)
-
-            # no actualiza bien la pantalla, consultar SDL_BlitSurface(concretamente
-            # eliminar el puntero a *dstrect)
-
             self.pantalla.blit(self.raton.surface, (self.raton.puntero.x, self.raton.puntero.y))
+            self.menu.update()
             pygame.display.update()
 
     def menu_carga_activo(self):
@@ -161,8 +156,13 @@ class Editor(object):
             self.menu_carga.update()
             self.dibuja(self.menu_carga)
             self.pantalla.blit(self.raton.surface, (self.raton.puntero.x, self.raton.puntero.y))
+            self.menu.update()
             pygame.display.update()
         self.pantalla.blit(self.camara.render(), (0, 0))
+
+        # ULTIMO: La camara no actualiza bien su posicion a 0,0 cuando se crea o carga
+        # el mapa dando lugar a un error de indice al cargar fuera
+        # de lo que puede dibujar, buscar solucion
 
     # /*
     # por lo que veo reduciendo el blit se reduce muchisimo el uso de cpu

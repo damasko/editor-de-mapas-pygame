@@ -4,7 +4,7 @@ from mapa_editor import Mapa
 
 class Mundo(object):
 
-    def __init__(self, nombre):
+    def __init__(self, nombre="default"):
 
         self.mapa = Mapa()
         self.tiles_suelos1 = self.mapa.crear_tiles_suelos()
@@ -61,7 +61,6 @@ class Mundo(object):
         self.mapa_paredes = self.mapa.parsear_paredes()
         self.mapa_tejados = self.mapa.parsear_tejados()
         self.mapa_enemigos = self.mapa.parsear_enemigos()
-        #print "tam grupo enemigos nuevo " + str(len(self.mapa.grupo_mundo))
 
     def cargar_mapa(self, fichero):
 
@@ -79,7 +78,6 @@ class Mundo(object):
         self.mapa_paredes = self.mapa.parsear_paredes()
         self.mapa_tejados = self.mapa.parsear_tejados()
         self.mapa_enemigos = self.mapa.parsear_enemigos()
-        #print "tam grupo enemigos cargar " + str(len(self.mapa.grupo_mundo))
 
     def grabar(self, nombre):
 

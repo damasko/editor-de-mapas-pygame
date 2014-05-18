@@ -62,7 +62,7 @@ class Camara(pygame.sprite.Sprite):
             posx = 0
             posy = 0
 
-            # monstruosidad :D maneja la camra
+            # monstruosidad :D maneja la camara
 
             if pygame.mouse.get_pressed()[2] and self.raton.puntero.colliderect(self.rect_left) and self.rect.x > 0:
                 posx = -self.velocidad
@@ -73,7 +73,6 @@ class Camara(pygame.sprite.Sprite):
             if pygame.mouse.get_pressed()[2] and self.raton.puntero.colliderect(self.rect_bottom) and self.rect.bottomright[1] / 32 < len(self.mundo.mapa_suelos1):
                 posy = +self.velocidad
 
-            #self.coord = self.get_coord()
             if pygame.mouse.get_pressed()[0]:
                 self.set_tile(tile_seleccionado)
 
@@ -87,23 +86,23 @@ class Camara(pygame.sprite.Sprite):
 
     def set_tile(self, tile_seleccionado):
 
-            coordx = self.get_coord()[0] / 32
-            coordy = self.get_coord()[1] / 32
+        coordx = self.get_coord()[0] / 32
+        coordy = self.get_coord()[1] / 32
 
-            if self.mundo.capa == 1:
+        if self.mundo.capa == 1:
 
-                capa_activa = self.mundo.mapa_suelos1
+            capa_activa = self.mundo.mapa_suelos1
 
-            elif self.mundo.capa == 3:
+        elif self.mundo.capa == 3:
 
-                capa_activa = self.mundo.mapa_paredes
+            capa_activa = self.mundo.mapa_paredes
 
-            else:
+        else:
 
-                capa_activa = self.mundo.mapa_tejados
+            capa_activa = self.mundo.mapa_tejados
 
-            self.pincel.rellena(tile_seleccionado, capa_activa, self.mundo,
-                                            coordx, coordy, self.mundo.modo_entidad)
+        self.pincel.rellena(tile_seleccionado, capa_activa, self.mundo,
+                                        coordx, coordy, self.mundo.modo_entidad)
 
     def tile_base(self, tile_activo):
 
@@ -150,9 +149,9 @@ class Camara(pygame.sprite.Sprite):
                         tile.caminable = tile_activo.caminable
                         self.mundo.mapa_tejados[i][j] = tile
 
-    def recargar(self, mundo, raton, tam):
+    def recargar(self, mundo):
 
-        self.__init__(mundo, raton, tam)
+        self.__init__(mundo, self.raton, self.tam)
 
     def set_pos(self, x, y):
 
@@ -194,7 +193,7 @@ class Camara(pygame.sprite.Sprite):
         else:
 
             self.tiley_max = (self.rect.bottomright[1] / 32) + 1
-
+        self.surface.fill((0, 0, 0))
         if self.mundo.capa == 1:
 
             for i in range(self.tiley_ini, self.tiley_max):
@@ -206,6 +205,7 @@ class Camara(pygame.sprite.Sprite):
                 if ente.capa == 1:
                     self.surface.blit(ente.surface, (ente.rect.x - self.rect.x,
                                 ente.rect.y - self.rect.y))
+
         elif self.mundo.capa == 3:
             for i in range(self.tiley_ini, self.tiley_max):
                 for j in range(self.tilex_ini, self.tilex_max):
@@ -216,6 +216,7 @@ class Camara(pygame.sprite.Sprite):
                         self.surface.blit(self.mundo.mapa_paredes[i][j].surface,
                              (self.mundo.mapa_paredes[i][j].x - self.rect.x,
                                   self.mundo.mapa_paredes[i][j].y - self.rect.y))
+
             for ente in self.entes:
                 if ente.capa == 1:
                     self.surface.blit(ente.surface, (ente.rect.x - self.rect.x,
@@ -230,16 +231,19 @@ class Camara(pygame.sprite.Sprite):
                         self.surface.blit(self.mundo.mapa_paredes[i][j].surface,
                          (self.mundo.mapa_paredes[i][j].x - self.rect.x,
                               self.mundo.mapa_paredes[i][j].y - self.rect.y))
+
                 for ente in self.entes:
                     if ente.capa == 1:
                         self.surface.blit(ente.surface, (ente.rect.x - self.rect.x,
                                         ente.rect.y - self.rect.y))
+
                 if self.mostrar_capa4:
                     for i in range(self.tiley_ini, self.tiley_max):
                         for j in range(self.tilex_ini, self.tilex_max):
                             self.surface.blit(self.mundo.mapa_tejados[i][j].surface,
                                 (self.mundo.mapa_tejados[i][j].x - self.rect.x,
                                 self.mundo.mapa_tejados[i][j].y - self.rect.y))
+
                 for ente in self.entes:
                     if ente.capa == 4:
                         self.surface.blit(ente.surface, (ente.rect.x - self.rect.x,
