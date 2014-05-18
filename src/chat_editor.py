@@ -5,7 +5,8 @@ from tile_editor import Tile
 
 class Chat(object):
 
-    def __init__(self, pantalla_tam, tile_seleccionado, capa, modo_entidad, borrar, autosave):
+    def __init__(self, pantalla_tam, tile_seleccionado, capa,
+                        modo_entidad, borrar, autosave, mundo):
 
         # Rehacer esta clase
 
@@ -19,11 +20,13 @@ class Chat(object):
 
         self.capa = capa
         self.modo_entidad = modo_entidad
+        self.nombre_mundo = "Nombre del mapa: " + mundo.nombre
         self.borrar = borrar
         self.text_layer = "CAPA ACTUAL: " + str(self.capa)
         self.text_tnombre = "nombre tile: " + self.tile_seleccionado.nombre
         self.text_ttipo = "tile tipo: " + self.tile_seleccionado.tipo
         self.texto_ayuda = "Pulsa F1 para la ayuda"
+
         if self.tile_seleccionado.caminable:
             self.text_tcaminable = "caminable: Si"
         else:
@@ -47,7 +50,7 @@ class Chat(object):
         return self.rect
 
     def update(self, tile_seleccionado, capa, visible2, visible3,
-                    modo_entidad, borrar, autosave):
+                    modo_entidad, borrar, autosave, mundo):
         self.tile_seleccionado = tile_seleccionado
         self.capa = capa
         self.modo_entidad = modo_entidad
@@ -61,8 +64,7 @@ class Chat(object):
                 self.texto_entidad = "MODO ENTIDAD" + self.texto_ent_borrar
             else:
                 self.texto_entidad = "MODO ENTIDAD"
-
-
+        self.nombre_mundo = "Nombre del mapa: " + mundo.nombre
         self.text_layer = "CAPA ACTUAL: " + str(self.capa)
         if self.capa == 3 and not visible2:
             self.text_layer = self.text_layer + " (OCULTA)"
@@ -85,6 +87,7 @@ class Chat(object):
 
     def imprime(self):
         self.surface_texto.fill((0, 0, 0))
+
         self.surface_texto.blit(self.fuente.render(self.text_tnombre, True,
                                 (255, 255, 255)), (self.offset, self.offset + 20))
         self.surface_texto.blit(self.fuente.render(self.text_ttipo, True,
@@ -95,6 +98,8 @@ class Chat(object):
                                 (255, 255, 255)), (self.offset, self.offset + 100))
         self.surface_texto.blit(self.fuente2.render(self.text_layer, True,
                                 (0, 255, 255)), (self.offset, self.offset + 120))
+        self.surface_texto.blit(self.fuente.render(self.nombre_mundo, True,
+                                (255, 255, 255)), (self.offset, self.offset + 140))
         if self.modo_entidad:
             self.surface_texto.blit(self.fuente.render(self.texto_entidad, True,
                             (255, 255, 255)), (self.offset + 200, self.offset + 200))

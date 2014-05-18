@@ -330,12 +330,12 @@ class Mapa(object):
         a = open(ascii_map, 'r')
 
         lista = list(a)
-        a.close()
         suelos = True
         paredes = True
         tejados = True
         enemigos = True
-        mundo.nombre = lista[0]
+        mundo.nombre = lista[0].split()[0]
+        print mundo.nombre
 
         i = 2
         while i < len(lista):
@@ -539,11 +539,11 @@ class Mapa(object):
             linea = []
             for elemento in fila:
                 tile = Tile()
-                if elemento == 'q':
+                if elemento == 't':
                     #suelo arido
                     tile.nombre = "tejado1"
                     tile.surface = self.tileset3[0][0].convert_alpha()
-                    tile.tipo = "q"
+                    tile.tipo = "t"
                     tile.caminable = True
                 elif elemento == 'g':
                     # cesped:

@@ -84,7 +84,7 @@ class Mundo(object):
         total = self.path + self.ruta_mapas + nombre + ".txt"
         ### mapa suelos
         mapa = open(total, 'w')
-        mapa.write(self.nombre + '\n')
+        mapa.write(nombre + '\n')
         mapa.write('@end_nombre\n')
 
         for fila in self.mapa_suelos1:

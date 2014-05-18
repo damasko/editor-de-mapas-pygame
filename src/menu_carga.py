@@ -1,6 +1,5 @@
 import pygame
 import os
-#from caja_texto import CajaTexto
 from boton_editor import Boton
 
 
@@ -15,7 +14,7 @@ class MenuCarga(object):
         self.ventana = pygame.surface.Surface((800, 2 * self.resolucion[1] / 3)).convert()
         self.rect = self.surface.get_rect()
         self.rect_ventana = self.ventana.get_rect()
-        self.rect_ventana.move_ip(self.rect.centerx - 400, 30)
+        self.rect_ventana.move_ip(self.rect.centerx - 400, 0)
         self.activo = False
         self.seleccionado = None
         self.array_botones = []
@@ -39,13 +38,16 @@ class MenuCarga(object):
         self.dirlist = os.listdir("mapas/")
         y = 0
         for nombre in self.dirlist:
-            boton = Boton(self.tamx, self.tamy, self.rect_ventana.centerx - 400, self.rect_ventana.y + y + 50, nombre, "res/boton_1.png", "res/boton_2.png")
+            boton = Boton(self.tamx, self.tamy, self.rect_ventana.centerx - 400, self.rect_ventana.y + y, nombre[:-4], "res/boton_1.png", "res/boton_2.png")
+            boton.rect.move(0, y)
             y += 50
+
             self.array_botones.append(boton)
         self.surface_partidas = pygame.surface.Surface((self.tamx, y)).convert()
         self.seleccionado = None
         self.scrolly = 0
-        self.scrolling = False
+        # mas tarde para que la surface no se vaya por ahi
+        #self.scrolling = False
 
     def ventana_focused(self):
 
@@ -63,11 +65,11 @@ class MenuCarga(object):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if (event.dict['button'] == 5):
 
-                    self.scrolly -= 20
+                    self.scrolly -= 50
 
                 if (event.dict['button'] == 4):
 
-                    self.scrolly += 20
+                    self.scrolly += 50
 
         for i in self.array_botones:
             i.click(self.raton.puntero.x, self.raton.puntero.y)
@@ -79,10 +81,9 @@ class MenuCarga(object):
                     self.seleccionado = i.texto
                     i.variable = 0
         self.ventana.blit(self.surface_partidas, (0, 0))
-        self.surface.blit(self.ventana, (self.rect_ventana.x, 0))
+        self.surface.blit(self.ventana, (self.rect_ventana.x, 30))
         self.boton_aceptar.click(self.raton.puntero.x, self.raton.puntero.y)
         self.boton_cancelar.click(self.raton.puntero.x, self.raton.puntero.y)
-
         self.boton_aceptar.imprime()
         self.boton_cancelar.imprime()
         if self.seleccionado:
@@ -93,7 +94,7 @@ class MenuCarga(object):
                 (self.boton_aceptar.rect.x, self.boton_aceptar.rect.y))
         self.surface.blit(self.boton_cancelar.surface,
                 (self.boton_cancelar.rect.x, self.boton_cancelar.rect.y))
-        #pygame.draw.rect(self.surface, (255,0,0), self.rect_ventana)
+
         if self.boton_cancelar.variable == 1:
             self.activo = False
             self.boton_cancelar.variable = 0
@@ -109,7 +110,7 @@ class MenuCarga(object):
             if self.seleccionado is not None:
 
                 self.camara.recargar(self.mundo)
-                self.mundo.cargar_mapa("mapas/" + self.seleccionado)
+                self.mundo.cargar_mapa("mapas/" + self.seleccionado + ".txt")
 
             else:
 

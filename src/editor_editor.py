@@ -36,7 +36,7 @@ class Editor(object):
                             self.menu_nmundo, self.menu_carga)
         self.chat = Chat(self.resolucion, self.mundo.tiles_suelos1[31][31], self.mundo.capa,
                       self.mundo.modo_entidad, self.camara.pincel.borrar,
-                       self.mundo.aut_save)
+                       self.mundo.aut_save, self.mundo)
 
         self.eventhandler = EventHandler(self)
 
@@ -78,7 +78,7 @@ class Editor(object):
             self.tile_activo_paredes = self.menu.marco_tileset.tile_seleccionado_paredes
 
             self.menu.update()
-            #print self.mundo.nombre
+
             # /* anotacion1
             # /** anotacion2
 
@@ -120,6 +120,7 @@ class Editor(object):
                     self.mundo.grabar("temporal")
                     self.cont_tiempo = 0
                     print "Mapa guardado en temporal.txt"
+
             pygame.display.update()
 
     def dibuja(self, ente):
@@ -130,7 +131,8 @@ class Editor(object):
 
         self.chat.update(self.tile_activo, self.mundo.capa,
                  self.camara.mostrar_capa3, self.camara.mostrar_capa4,
-                 self.mundo.modo_entidad, self.camara.pincel.borrar, self.mundo.aut_save)
+                 self.mundo.modo_entidad, self.camara.pincel.borrar,
+                 self.mundo.aut_save, self.mundo)
         self.chat.imprime()
 
 
