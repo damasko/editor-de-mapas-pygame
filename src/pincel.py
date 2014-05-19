@@ -149,7 +149,6 @@ class Pincel(pygame.sprite.Sprite):
                         existe = False
 
                     if not existe:
-
                         enemigo = Enemigo()
                         enemigo.surface = tile_seleccionado.surface.copy()
                         enemigo.rect = enemigo.surface.get_rect()
@@ -161,6 +160,12 @@ class Pincel(pygame.sprite.Sprite):
 
                 except:
                     pass
+
+    def no_pared(self, coordx, coordy):
+        # no se hasta que punto podria ser util no ponerlo en una pared, tambien se
+        # podria poner detras de ella...
+        if self.mundo.mapa_paredes[coordx / 32][coordy / 32].surface is None:
+            return True
 
     def borra_enemigo(self, coordx, coordy, mundo):
 

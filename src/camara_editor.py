@@ -212,15 +212,19 @@ class Camara(pygame.sprite.Sprite):
                     self.surface.blit(self.mundo.mapa_suelos1[i][j].surface,
                      (self.mundo.mapa_suelos1[i][j].x - self.rect.x,
                           self.mundo.mapa_suelos1[i][j].y - self.rect.y))
-                    if self.mostrar_capa3:
-                        self.surface.blit(self.mundo.mapa_paredes[i][j].surface,
-                             (self.mundo.mapa_paredes[i][j].x - self.rect.x,
-                                  self.mundo.mapa_paredes[i][j].y - self.rect.y))
 
             for ente in self.entes:
                 if ente.capa == 1:
                     self.surface.blit(ente.surface, (ente.rect.x - self.rect.x,
                                 ente.rect.y - self.rect.y))
+
+            if self.mostrar_capa3:
+                for i in range(self.tiley_ini, self.tiley_max):
+                    for j in range(self.tilex_ini, self.tilex_max):
+                        if self.mundo.mapa_paredes[i][j].surface is not None:
+                            self.surface.blit(self.mundo.mapa_paredes[i][j].surface,
+                                 (self.mundo.mapa_paredes[i][j].x - self.rect.x,
+                                      self.mundo.mapa_paredes[i][j].y - self.rect.y))
         else:
             if self.mundo.capa == 4:
                 for i in range(self.tiley_ini, self.tiley_max):
@@ -228,21 +232,26 @@ class Camara(pygame.sprite.Sprite):
                         self.surface.blit(self.mundo.mapa_suelos1[i][j].surface,
                          (self.mundo.mapa_suelos1[i][j].x - self.rect.x,
                               self.mundo.mapa_suelos1[i][j].y - self.rect.y))
-                        self.surface.blit(self.mundo.mapa_paredes[i][j].surface,
-                         (self.mundo.mapa_paredes[i][j].x - self.rect.x,
-                              self.mundo.mapa_paredes[i][j].y - self.rect.y))
 
                 for ente in self.entes:
                     if ente.capa == 1:
                         self.surface.blit(ente.surface, (ente.rect.x - self.rect.x,
                                         ente.rect.y - self.rect.y))
 
+                for i in range(self.tiley_ini, self.tiley_max):
+                    for j in range(self.tilex_ini, self.tilex_max):
+                        if self.mundo.mapa_paredes[i][j].surface is not None:
+                            self.surface.blit(self.mundo.mapa_paredes[i][j].surface,
+                             (self.mundo.mapa_paredes[i][j].x - self.rect.x,
+                                  self.mundo.mapa_paredes[i][j].y - self.rect.y))
+
                 if self.mostrar_capa4:
                     for i in range(self.tiley_ini, self.tiley_max):
                         for j in range(self.tilex_ini, self.tilex_max):
-                            self.surface.blit(self.mundo.mapa_tejados[i][j].surface,
-                                (self.mundo.mapa_tejados[i][j].x - self.rect.x,
-                                self.mundo.mapa_tejados[i][j].y - self.rect.y))
+                            if self.mundo.mapa_tejados[i][j].surface is not None:
+                                self.surface.blit(self.mundo.mapa_tejados[i][j].surface,
+                                    (self.mundo.mapa_tejados[i][j].x - self.rect.x,
+                                    self.mundo.mapa_tejados[i][j].y - self.rect.y))
 
                 for ente in self.entes:
                     if ente.capa == 4:

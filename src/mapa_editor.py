@@ -518,7 +518,7 @@ class Mapa(object):
                 else:
                     # algo:
                     tile.nombre = "default_pared"
-                    tile.surface = self.tileset2[31][31].convert_alpha()
+                    tile.surface = None
                     tile.tipo = "$"
                     tile.caminable = False
                 #tile.rect.move_ip(x, y)
@@ -571,7 +571,7 @@ class Mapa(object):
                 else:
                     # algo:
                     tile.nombre = "default_tejado"
-                    tile.surface = self.tileset3[31][31].convert_alpha()
+                    tile.surface = None
                     tile.tipo = "$"
                     tile.caminable = False
                 #tile.rect.move_ip(x, y)

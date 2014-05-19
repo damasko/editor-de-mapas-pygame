@@ -38,8 +38,8 @@ class MenuCarga(object):
         self.dirlist = os.listdir("mapas/")
         y = 0
         for nombre in self.dirlist:
-            boton = Boton(self.tamx, self.tamy, self.rect_ventana.centerx - 400, self.rect_ventana.y + y, nombre[:-4], "res/boton_1.png", "res/boton_2.png")
-            boton.rect.move(0, y)
+            boton = Boton(self.tamx, self.tamy, self.rect_ventana.centerx - 400, y, nombre[:-4], "res/boton_1.png", "res/boton_2.png")
+            #boton.rect.move(0, 0)
             y += 50
 
             self.array_botones.append(boton)
